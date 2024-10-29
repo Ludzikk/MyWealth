@@ -46,3 +46,22 @@
 .miscellaneous {
 	background: $miscellaneous;
 }
+
+.no-phone {
+	display: none;
+	width: 0%;
+}
+
+@media (min-width: 576px){
+	.main {
+		&__container {
+			&--30 {
+				width: 30%;
+			}
+		}
+	}
+
+	.no-phone {
+		display: flex;
+	}
+}
