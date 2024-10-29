@@ -1,0 +1,25 @@
+@use "./colors" as *;
+
+.footer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 60px;
+	box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.25);
+	background: $nav-footer-color;
+
+	&__link {
+		font-size: 2rem;
+		font-weight: bold;
+		letter-spacing: 0.8px;
+        transition: color 0.3s;
+
+        &:hover {
+            color: $green-color;
+        }
+	}
+}
+
+.green-text {
+	color: $green-color;
+}

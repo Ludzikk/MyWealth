@@ -1,0 +1,28 @@
+$nav-footer-color: #272b2f;
+$body-color: #212529;
+$text-main-color: #ffff;
+$text-second-color: rgba(255, 255, 255, 0.8);
+$text-black-color: black;
+$green-color: #12d382;
+$income-text-bg: #21bf73;
+$income-text-boxshadow: rgba(33, 191, 115, 0.25);
+$expense-text-bg: #fd5e53;
+$expense-text-boxshadow: rgba(253, 94, 83, 0.25);
+$container-bg: #2a2e32;
+$total-balance-color: linear-gradient(
+	125deg,
+	#29aa9f 20%,
+	#073766 80%,
+	#0000 100%
+);
+$income-bg: linear-gradient(45deg, #2a2e32 0%, #2a2e32 30%, #2d453b 100%);
+$expense-bg: linear-gradient(45deg, #2a2e32 0%, #2a2e32 30%, #4a2f2d 100%);
+$budget-spent-bg: linear-gradient(0deg, #2a2e32 0%, rgba(28, 50, 71, 0.3) 100%);
+$last-spendings-bg: linear-gradient(71deg, #2a2e32 0%, rgb(28, 50, 71, 0.3) 100%);
+$expense-split: linear-gradient(0deg, rgb(42, 46, 50) 0%, rgb(42, 46, 50, 0.3) 100%);
+$food: #FFE562;
+$health: #F874A3;
+$bills: #7776F8;
+$entertainment: #96E298;
+$transportation: #D474FC;
+$miscellaneous: #FF8E62;

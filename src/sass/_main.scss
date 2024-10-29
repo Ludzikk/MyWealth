@@ -1,0 +1,419 @@
+@use "./colors" as *;
+
+.main {
+	padding: 6em 0;
+
+	&__top,
+	&__mid,
+	&__bottom {
+		display: flex;
+		flex-direction: column;
+	}
+
+	&__title {
+		position: relative;
+		font-size: 2.4rem;
+		font-weight: normal;
+		letter-spacing: 1px;
+		z-index: 1;
+	}
+
+	&__circle {
+		position: relative;
+		width: 150px;
+		height: 150px;
+		border-radius: 50%;
+		background: conic-gradient(
+			$food 0 10%,
+			$health 0 30%,
+			$bills 0 45%,
+			$entertainment 0 65%,
+			$transportation 0 90%,
+			$miscellaneous 0 100%,
+			rgba(0, 0, 0, 0.1) 100% 100%
+		);
+
+		&-inner {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			width: 120px;
+			height: 120px;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			padding-top: 2.25em;
+			border-radius: 50%;
+			box-shadow: inset 0 10px 10px rgba(0, 0, 0, 0.25);
+			background: $container-bg;
+			z-index: 1;
+		}
+	}
+
+	&__list {
+		display: flex;
+
+		&-left {
+			padding-left: 4em;
+			padding-right: 2em;
+		}
+	}
+
+	&__item {
+		margin: 1em 0;
+
+		&-bottom {
+			display: flex;
+			padding-top: 0.5em;
+		}
+	}
+
+	&__color {
+		margin-right: 1em;
+		width: 5px;
+		height: 20px;
+		border-radius: 10px;
+		box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+		background: red;
+	}
+
+	&__container {
+		padding: 2em;
+		margin: 1em;
+		height: 260px;
+		border-radius: 30px;
+		box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+		background: $container-bg;
+
+		&-circle {
+			display: flex;
+
+			&-right, &-left {
+				display: flex;
+				align-items: center;
+			}
+		}
+
+		&-top {
+			padding-bottom: 2.5em;
+		}
+
+		&--mb20 {
+			margin-bottom: 2em;
+		}
+
+		&--p15 {
+			padding: 1em 1.5em;
+		}
+
+		&--280 {
+			height: 120px;
+		}
+
+		&--income {
+			background: $income-bg;
+		}
+
+		&--expense {
+			background: $expense-bg;
+		}
+
+		&--expense-split {
+			background: $expense-split;
+		}
+
+		&--budget,
+		&--total,
+		&--last {
+			position: relative;
+			overflow: hidden;
+		}
+
+		&--last {
+			background: $last-spendings-bg;
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: 80px;
+				right: -130px;
+				width: 400px;
+				height: 200px;
+				transform: rotate(-58deg);
+				border-radius: 30px;
+				background: rgba(255, 255, 255, 0.1);
+			}
+
+			&::before {
+				content: "";
+				position: absolute;
+				top: 30px;
+				right: -180px;
+				width: 400px;
+				height: 200px;
+				transform: rotate(41deg);
+				border-radius: 30px;
+				background: rgba(255, 255, 255, 0.1);
+			}
+		}
+
+		&--budget {
+			background: $budget-spent-bg;
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: -35px;
+				right: -200px;
+				width: 320px;
+				height: 270px;
+				transform: rotate(337deg);
+				border-radius: 30px;
+				background: rgba(111, 183, 255, 0.08);
+			}
+		}
+
+		&--total {
+			background: $total-balance-color;
+
+			&::after {
+				content: "";
+				position: absolute;
+				top: -20px;
+				right: -110px;
+				width: 200px;
+				height: 260px;
+				transform: rotate(45deg);
+				border-radius: 30px;
+				background: rgba(255, 255, 255, 0.1);
+			}
+
+			&::before {
+				content: "";
+				position: absolute;
+				bottom: -160px;
+				right: 30px;
+				width: 200px;
+				height: 260px;
+				transform: rotate(45deg);
+				border-radius: 30px;
+				background: rgba(255, 255, 255, 0.1);
+			}
+		}
+	}
+
+	&__text {
+		position: relative;
+		z-index: 1;
+
+		&--bold {
+			font-weight: bold;
+		}
+
+		&--80alpha {
+			color: $text-second-color;
+		}
+
+		&--12 {
+			font-size: 1.2rem;
+			letter-spacing: 0.4px;
+		}
+
+		&--14 {
+			font-size: 1.4rem;
+			letter-spacing: 0.3px;
+		}
+
+		&--16 {
+			font-size: 1.6rem;
+		}
+
+		&--18 {
+			font-size: 1.6rem;
+			letter-spacing: 0.7px;
+		}
+
+		&--24 {
+			padding-top: 0.3em;
+			font-size: 2.4rem;
+			letter-spacing: 1px;
+		}
+
+		&--28 {
+			font-size: 2.8rem;
+			letter-spacing: 1.7px;
+		}
+
+		&--36 {
+			font-size: 3.6rem;
+			letter-spacing: 2.2px;
+		}
+
+		&--total {
+			padding: 1.5rem 0;
+		}
+
+		&--total10 {
+			padding: 1rem 0 0;
+		}
+
+		&--p40 {
+			padding: 4rem 0;
+		}
+
+		&--black {
+			color: $text-black-color;
+		}
+
+		&--income,
+		&--expense,
+		&--date {
+			padding: 0.7rem 1em;
+			border-radius: 20px;
+		}
+
+		&--date {
+			background: #3b4045;
+			box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+		}
+
+		&--income {
+			box-shadow: 0 0 10px $income-text-boxshadow;
+			background-color: $income-text-bg;
+		}
+
+		&--expense {
+			box-shadow: 0 0 10px $expense-text-boxshadow;
+			background-color: $expense-text-bg;
+		}
+	}
+
+	&__button {
+		position: relative;
+		margin-top: 5rem;
+		padding: 0.75em 1.5em;
+		font-size: 1.8rem;
+		font-weight: bold;
+		letter-spacing: 0.7px;
+		border: none;
+		border-radius: 30px;
+		box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+		background: $container-bg;
+		cursor: pointer;
+		z-index: 1;
+	}
+}
+
+sup {
+	position: absolute;
+	top: -2px;
+	right: 0;
+}
+
+.sup__higher {
+	top: -5px;
+}
+
+@media (min-width: 768px) {
+	.main {
+		&__top {
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		&__top-mid {
+			flex-grow: 1;
+		}
+
+		&__container {
+			&--total {
+				width: 50%;
+			}
+
+			&--400 {
+				min-width: 400px;
+			}
+
+			&--280 {
+				min-width: 280px;
+			}
+
+			&--440 {
+				width: 100%;
+			}
+
+			&--budget {
+				width: 100%;
+			}
+
+			&--740 {
+				width: 100%;
+			}
+
+			&--700 {
+				width: 100%;
+			}
+		}
+	}
+}
+
+@media (min-width: 992px) {
+	.main {
+		&__mid,
+		&__bottom {
+			flex-direction: row;
+			justify-content: center;
+			flex-wrap: wrap;
+		}
+
+		&__container {
+			&--740 {
+				max-width: 740px;
+				width: auto;
+				flex-grow: 1;
+			}
+
+			&--700 {
+				max-width: 700px;
+				width: auto;
+				flex-grow: 1;
+			}
+
+			&--budget {
+				max-width: 400px;
+				width: 100%;
+			}
+
+			&--sub {
+				max-width: 440px;
+				width: 100%;
+			}
+		}
+	}
+}
+
+@media (min-width: 1200px) {
+	.main {
+		&__top-mid {
+			flex-grow: 0;
+		}
+
+		&__container {
+			&--400 {
+				max-width: 400px;
+				width: 100%;
+			}
+
+			&--280 {
+				width: 280px;
+			}
+
+			&--440 {
+				max-width: 440px;
+				width: 100%;
+			}
+		}
+	}
+}

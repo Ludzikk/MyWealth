@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyWealth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Exo+2:ital,wght@0,100..900;1,100..900&family=Lato:wght@400;700&display=swap"
+        rel="stylesheet">
+        <link rel="shortcut icon" href="./dist/img/logo.png" type="image/x-icon">
+    <link href="./dist/css/hamburgers.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./dist/css/style.min.css">
+    <script src="https://kit.fontawesome.com/bdb2f8ae99.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="nav">
+    <div class="wrapper">
+        <div class="nav__container">
+            <div class="nav__link-container"><a href="#" class="nav__link">Overview</a></div>
+            <img src="./dist/img/logo.png" alt="Logo" class="nav__logo">
+            <div class="nav__link-container"><a href="#" class="nav__link">Profile</a></div>
+        </div>
+        <div class="nav__bg"></div>
+    </div>
+</nav>
+    <main class="main">
+    <div class="wrapper">
+        <div class="main__box">
+            <div class="main__top">
+                <div class="main__container main__container--400 main__container--total">
+                    <h2 class="main__title">Total balance</h2>
+                    <p class="main__text main__text--36 main__text--bold main__text--total">5,234,32<sup
+                            class="main__text main__text--bold main__text--16 currency sup__higher">$</sup></p>
+                    <p class="main__text main__text--14 main__text--80alpha">+<span class="currency">$</span>2,523
+                        revenue
+                        from last month</p>
+                    <button class="main__button">Change</button>
+                </div>
+                <div class="main__top-mid">
+                    <div
+                        class="main__container main__container--280 main__container--income main__container--mb20 main__container--p15">
+                        <h2 class="main__title">Income</h2>
+                        <p class="main__text main__text--28 main__text--bold main__text--total10">+2,523<sup
+                                class="main__text main__text--bold main__text--16 currency">$</sup></p>
+                        <div class="display-flex justify-between">
+                            <p class="main__text main__text--14 main__text--80alpha">This month's income</p>
+                            <p class="main__text main__text--income main__text--black main__text--12">+12.4%</p>
+                        </div>
+                    </div>
+                    <div class="main__container main__container--280 main__container--expense main__container--p15">
+                        <h2 class="main__title">Expense</h2>
+                        <p class="main__text main__text--28 main__text--bold main__text--total10">-1,232<sup
+                                class="main__text main__text--bold main__text--16 currency">$</sup></p>
+                        <div class="display-flex justify-between">
+                            <p class="main__text main__text--14 main__text--80alpha">This month's expense</p>
+                            <p class="main__text main__text--expense main__text--black main__text--12">-9.5%</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="main__container main__container--expense-split main__container--440">
+                    <div class="main__container-top justify-between display-flex">
+                        <h2 class="main__title">Expense split</h2>
+                        <p class="main__text main__text--14 main__text--80alpha main__text--date">Aug</p>
+                    </div>
+                    <div class="main__container-circle">
+                        <div class="main__container-circle-left">
+                            <div class="main__circle">
+                                <div class="main__circle-inner">
+                                    <p class="main__text main__text--18">Total</p>
+                                    <p class="main__text main__text--bold main__text--24">1,124<sup
+                                            class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="main__container-circle-right">
+                            <ul class="main__list">
+                                <div class="main__list-left">
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Food</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color food"></div>
+                                            <p class="main__text main__text--bold main__text--18">10%</p>
+                                        </div>
+                                    </li>
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Health</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color health"></div>
+                                            <p class="main__text main__text--bold main__text--18">20%</p>
+                                        </div>
+                                    </li>
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Bills</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color bills"></div>
+                                            <p class="main__text main__text--bold main__text--18">15%</p>
+                                        </div>
+                                    </li>
+                                </div>
+                                <div class="main__list-right">
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Entertainment</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color entertainment"></div>
+                                            <p class="main__text main__text--bold main__text--18">20%</p>
+                                        </div>
+                                    </li>
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Transportation</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color transportation"></div>
+                                            <p class="main__text main__text--bold main__text--18">15%</p>
+                                        </div>
+                                    </li>
+                                    <li class="main__item">
+                                        <p class="main__text main__text--14 main__text--80alpha">Miscellaneous</p>
+                                        <div class="main__item-bottom">
+                                            <div class="main__color miscellaneous"></div>
+                                            <p class="main__text main__text--bold main__text--18">15%</p>
+                                        </div>
+                                    </li>
+                                </div>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="main__mid">
+                <div class="main__container main__container--budget main__container--400 main__container--mb20">
+                    <h2 class="main__title">Budget spent</h2>
+                    <p class="main__text main__text--36 main__text--bold main__text--p40">
+                        <span id="amountSpent">1,424,23</span><sup
+                            class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>/<span
+                            id="amountToSpent">3,000,00</span><sup
+                            class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>
+                    </p>
+                    <p class="main__text main__text--14 main__text--80alpha">You got $<span
+                            class="amountLeft">1,575,77</span> left this month</p>
+                </div>
+                <div class="main__container main__container--last main__container--740">
+                    <h2 class="main__title">Last spendings</h2>
+                </div>
+            </div>
+            <div class="main__bottom">
+                <div class="main__container main__container--700">
+                    <h2 class="main__title">Revenue flow</h2>
+                </div>
+                <div class="main__container main__container--sub main__container--440">
+                    <h2 class="main__title">Subscriptions</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+    <footer class="footer">
+    <a href="https://rafdev.pl/" class="footer__link">raf<span class="green-text">dev</span>.pl</a>
+</footer>
+    <script type="module" src="./dist/js/script.min.js"></script>
+</body>
+
+</html>

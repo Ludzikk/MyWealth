@@ -1,0 +1,44 @@
+@use "./colors" as *;
+
+.wrapper {
+	margin: 0 auto;
+	max-width: 1200px;
+	width: 100%;
+}
+
+.hidden {
+	display: none;
+}
+
+.display-flex {
+	display: flex;
+}
+
+.justify-between {
+	justify-content: space-between;
+	align-items: center;
+}
+
+.food {
+	background: $food;
+}
+
+.health {
+	background: $health;
+}
+
+.bills {
+	background: $bills;
+}
+
+.entertainment {
+	background: $entertainment;
+}
+
+.transportation {
+	background: $transportation;
+}
+
+.miscellaneous {
+	background: $miscellaneous;
+}
