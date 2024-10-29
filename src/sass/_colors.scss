@@ -19,11 +19,20 @@ $total-balance-color: linear-gradient(
 $income-bg: linear-gradient(45deg, #2a2e32 0%, #2a2e32 30%, #2d453b 100%);
 $expense-bg: linear-gradient(45deg, #2a2e32 0%, #2a2e32 30%, #4a2f2d 100%);
 $budget-spent-bg: linear-gradient(0deg, #2a2e32 0%, rgba(28, 50, 71, 0.3) 100%);
-$last-spendings-bg: linear-gradient(71deg, #2a2e32 0%, rgb(28, 50, 71, 0.3) 100%);
-$expense-split: linear-gradient(0deg, rgb(42, 46, 50) 0%, rgb(42, 46, 50, 0.3) 100%);
-$food: #FFE562;
-$health: #F874A3;
-$bills: #7776F8;
-$entertainment: #96E298;
-$transportation: #D474FC;
-$miscellaneous: #FF8E62;
+$last-spendings-bg: linear-gradient(
+	71deg,
+	#2a2e32 0%,
+	rgb(28, 50, 71, 0.3) 100%
+);
+$expense-split: linear-gradient(
+	0deg,
+	rgb(42, 46, 50) 0%,
+	rgb(42, 46, 50, 0.3) 100%
+);
+$food: #ffe562;
+$health: #f874a3;
+$bills: #7776f8;
+$entertainment: #96e298;
+$transportation: #d474fc;
+$miscellaneous: #ff8e62;
+$revenue-box: rgb(138, 121, 165);

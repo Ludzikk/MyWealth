@@ -51,6 +51,103 @@
 		}
 	}
 
+	&__revenue {
+		&-list {
+			display: flex;
+			align-items: flex-end;
+			height: 180px;
+			padding-bottom: 0.2em;
+			overflow-x: auto;
+
+			&::-webkit-scrollbar-track {
+				background-color: #333;
+			}
+		
+			&::-webkit-scrollbar {
+				height: 4px;
+			}
+		
+			&::-webkit-scrollbar-thumb {
+				background-color: white;
+			}
+		}
+
+		&-box {
+			position: relative;
+			margin-bottom: 0.2em;
+			width: 80px;
+			border-radius: 10px;
+			background: $revenue-box;
+
+			&--1200 {
+				height: 100px;
+
+				&::after {
+					content: "+$1.2K";
+					position: absolute;
+					bottom: 10px;
+					left: 50%;
+					transform: translate(-50%);
+					font-size: 1.4rem;
+					font-weight: bold;
+					letter-spacing: 0.3px;
+				}
+			}
+
+			&--1700 {
+				height: 120px;
+
+				&::after {
+					content: "+$1.7K";
+					position: absolute;
+					bottom: 10px;
+					left: 50%;
+					transform: translate(-50%);
+					font-size: 1.4rem;
+					font-weight: bold;
+					letter-spacing: 0.3px;
+				}
+			}
+
+			&--2100 {
+				height: 150px;
+
+				&::after {
+					content: "+$2.1K";
+					position: absolute;
+					bottom: 10px;
+					left: 50%;
+					transform: translate(-50%);
+					font-size: 1.4rem;
+					font-weight: bold;
+					letter-spacing: 0.3px;
+				}
+			}
+
+			&--800 {
+				height: 60px;
+
+				&::after {
+					content: "+$0.8k";
+					position: absolute;
+					bottom: 10px;
+					left: 50%;
+					transform: translate(-50%);
+					font-size: 1.4rem;
+					font-weight: bold;
+					letter-spacing: 0.3px;
+				}
+			}
+		}
+
+		&-item {
+			margin: 0 0.7em;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+	}
+
 	&__list {
 		display: flex;
 
@@ -402,7 +499,7 @@ sup {
 	top: -5px;
 }
 
-@media (min-width: 576px){
+@media (min-width: 576px) {
 	.main {
 		&__container {
 			&--30 {
@@ -434,7 +531,7 @@ sup {
 			&-circle {
 				flex-direction: row;
 			}
-			
+
 			&--total {
 				width: 50%;
 			}
