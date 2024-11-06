@@ -96,13 +96,12 @@ const monthNamesShort = [
 
 const firebaseConfig = {
 	apiKey: "AIzaSyAnQPHugOMwt4HwC-i-1srtFBr8oe1OEiY",
-	authDomain: "mywealth-8f207.firebaseapp.com",
-	projectId: "mywealth-8f207",
-	storageBucket: "mywealth-8f207.appspot.com",
-	messagingSenderId: "735896347785",
-	appId: "1:735896347785:web:851e7179c61fb1e4e59258",
-	databaseURL:
-		"https://mywealth-8f207-default-rtdb.europe-west1.firebasedatabase.app",
+authDomain: "mywealth-8f207.firebaseapp.com",
+projectId: "mywealth-8f207",
+storageBucket: "mywealth-8f207.appspot.com",
+messagingSenderId: "735896347785",
+appId: "1:735896347785:web:851e7179c61fb1e4e59258",
+databaseURL:"https://mywealth-8f207-default-rtdb.europe-west1.firebasedatabase.app",
 };
 
 const app = initializeApp(firebaseConfig);
@@ -187,7 +186,7 @@ const loginUser = () => {
 			.then((userCredential) => {
 				// Signed in
 				const user = userCredential.user;
-				console.log("User signed in:", user);
+				setEverything();
 			})
 			.catch((error) => {
 				const errorCode = error.code;
@@ -195,7 +194,6 @@ const loginUser = () => {
 				console.error("Error signing in:", errorCode, errorMessage);
 			});
 
-		setEverything();
 	}
 };
 
@@ -645,19 +643,17 @@ const setBudgetSpentBox = () => {
 			budgetLimit.textContent = formatNumber(userLimit);
 
 			onValue(
-				ref(db, `users/${user.uid}/money/year${year}/month${month}/expense`),
-				(expenseSnapshot) => {
-					if (expenseSnapshot.exists()) {
-						const expense = expenseSnapshot.val();
-						budgetSpent.textContent = formatNumber(expense);
-						budgetLeft.textContent = formatNumber(userLimit - expense);
-					} else {
-						// Jeśli nie ma jeszcze wydatków w bazie, ustawiamy 0
-						budgetSpent.textContent = formatNumber(0);
-						budgetLeft.textContent = formatNumber(userLimit);
-					}
+				ref(db, `users/${user.uid}/money/year${year}/month${month}/expense`), (expenseSnapshot) => {
+				if (expenseSnapshot.exists()) {
+					const expense = expenseSnapshot.val();
+					budgetSpent.textContent = formatNumber(expense);
+					budgetLeft.textContent = formatNumber(userLimit - expense);
+				} else {
+					// Jeśli nie ma jeszcze wydatków w bazie, ustawiamy 0
+					budgetSpent.textContent = formatNumber(0);
+					budgetLeft.textContent = formatNumber(userLimit);
 				}
-			);
+			});
 		});
 	});
 };
@@ -996,7 +992,7 @@ const addExpense = () => {
 								[expenseSelect.value]:
 									snapshot.val() + parseFloat(addExpenseInput.value),
 							}
-						);
+						)
 
 						update(
 							ref(
@@ -1008,7 +1004,7 @@ const addExpense = () => {
 									type: expenseSelect.value,
 									price: parseFloat(addExpenseInput.value),
 									date: `${currentDate.getDay()}.${currentDate.getMonth()}.${currentDate.getFullYear()}`,
-								},
+								}
 							}
 						);
 					})
@@ -1032,7 +1028,7 @@ const createLastSpendings = () => {
 
 		onValue(spendingsRef, (snapshot) => {
 			lastSpendings.innerHTML = "";
-
+			
 			if (snapshot.exists()) {
 				snapshot.forEach((childSnapshot) => {
 					const childData = childSnapshot.val();
