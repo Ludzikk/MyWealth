@@ -44,7 +44,7 @@ function javaScript(done) {
 		.pipe(sourcemaps.init())
 		.pipe(
 			babel({
-				presets: ["@babel/env"],
+				presets: [["@babel/env", { modules: false }]],
 			})
 		)
 		.pipe(uglify())
@@ -57,6 +57,7 @@ function javaScript(done) {
 		.pipe(dest(paths.jsDest));
 	done();
 }
+
 
 function convertImages(done) {
 	src(paths.img).pipe(imagemin()).pipe(dest(paths.imgDest));

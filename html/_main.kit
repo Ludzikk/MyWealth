@@ -4,45 +4,62 @@
             <div class="main__top">
                 <div class="main__container main__container--400 main__container--total">
                     <h2 class="main__title">Total balance</h2>
-                    <p class="main__text main__text--36 main__text--bold main__text--total">5,234,32<sup
-                            class="main__text main__text--bold main__text--16 currency sup__higher">$</sup></p>
-                    <p class="main__text main__text--14 main__text--80alpha">+<span class="currency">$</span>2,523
+                    <p class="main__text main__text--36 main__text--bold main__text--total">
+                        <span id="totalBalance">5,234,32</span><sup
+                            class="main__text main__text--bold main__text--16 currency sup__higher">$</sup>
+                    </p>
+                    <p class="main__text main__text--14 main__text--80alpha">+<span class="currency">$</span><span
+                            id="revenueLastMonth">2,523</span>
                         revenue
                         from last month</p>
-                    <button class="main__button">Change</button>
+                    <button class="main__button" id="addTotal">Add</button>
                 </div>
                 <div class="main__top-mid">
                     <div
                         class="main__container main__container--280 main__container--income main__container--mb20 main__container--p15">
-                        <h2 class="main__title">Income</h2>
-                        <p class="main__text main__text--28 main__text--bold main__text--total10">+2,523<sup
-                                class="main__text main__text--bold main__text--16 currency">$</sup></p>
+                        <div class="justify-between display-flex">
+                            <h2 class="main__title">Income</h2>
+                            <i class="fa-solid fa-plus main__text main__text--24 main__text--60alpha main__text--hover" id="incomeBtn"></i>
+                        </div>
+                        <p class="main__text main__text--28 main__text--bold main__text--total10">
+                            <span id="incomeTotal"></span><sup
+                                class="main__text main__text--bold main__text--16 currency">$</sup>
+                        </p>
                         <div class="display-flex justify-between">
                             <p class="main__text main__text--14 main__text--80alpha">This month's income</p>
-                            <p class="main__text main__text--income main__text--black main__text--12">+12.4%</p>
+                            <p class="main__text main__text--income main__text--black main__text--12"><span
+                                    id="incomePercent">12.4</span>%</p>
                         </div>
                     </div>
                     <div class="main__container main__container--280 main__container--expense main__container--p15">
-                        <h2 class="main__title">Expense</h2>
-                        <p class="main__text main__text--28 main__text--bold main__text--total10">-1,232<sup
-                                class="main__text main__text--bold main__text--16 currency">$</sup></p>
+                        <div class="justify-between display-flex">
+                            <h2 class="main__title">Expense</h2>
+                            <i class="fa-solid fa-plus main__text main__text--24 main__text--60alpha main__text--hover" id="expenseBtn"></i>
+                        </div>
+                        <p class="main__text main__text--28 main__text--bold main__text--total10">
+                            <span id="expenseTotal"></span><sup
+                                class="main__text main__text--bold main__text--16 currency">$</sup>
+                        </p>
                         <div class="display-flex justify-between">
                             <p class="main__text main__text--14 main__text--80alpha">This month's expense</p>
-                            <p class="main__text main__text--expense main__text--black main__text--12">-9.5%</p>
+                            <p class="main__text main__text--expense main__text--black main__text--12"><span
+                                    id="expensePercent">12.4</span>%</p>
                         </div>
                     </div>
                 </div>
                 <div class="main__container main__container--expense-split main__container--440">
                     <div class="main__container-top justify-between display-flex">
                         <h2 class="main__title">Expense split</h2>
-                        <p class="main__text main__text--14 main__text--80alpha main__text--date">Aug</p>
+                        <p class="main__text main__text--14 main__text--80alpha main__text--date"><span
+                                id="expenseSplitMonth">Aug</span></p>
                     </div>
                     <div class="main__container-circle">
                         <div class="main__container-circle-left">
                             <div class="main__circle">
                                 <div class="main__circle-inner">
                                     <p class="main__text main__text--18">Total</p>
-                                    <p class="main__text main__text--bold main__text--24">1,124<sup
+                                    <p class="main__text main__text--bold main__text--24"><span
+                                            id="expenseSplitTotal">1,124</span><sup
                                             class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>
                                     </p>
                                 </div>
@@ -51,21 +68,21 @@
                         <div class="main__container-circle-right">
                             <ul class="main__list">
                                 <div class="main__list-left">
-                                    <li class="main__item">
+                                    <li class="main__item" id="food">
                                         <p class="main__text main__text--14 main__text--80alpha">Food</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color food"></div>
                                             <p class="main__text main__text--bold main__text--18">10%</p>
                                         </div>
                                     </li>
-                                    <li class="main__item">
+                                    <li class="main__item" id="health">
                                         <p class="main__text main__text--14 main__text--80alpha">Health</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color health"></div>
                                             <p class="main__text main__text--bold main__text--18">20%</p>
                                         </div>
                                     </li>
-                                    <li class="main__item">
+                                    <li class="main__item" id="bills">
                                         <p class="main__text main__text--14 main__text--80alpha">Bills</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color bills"></div>
@@ -74,21 +91,21 @@
                                     </li>
                                 </div>
                                 <div class="main__list-right">
-                                    <li class="main__item">
+                                    <li class="main__item" id="entertainment">
                                         <p class="main__text main__text--14 main__text--80alpha">Entertainment</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color entertainment"></div>
                                             <p class="main__text main__text--bold main__text--18">20%</p>
                                         </div>
                                     </li>
-                                    <li class="main__item">
+                                    <li class="main__item" id="transportation">
                                         <p class="main__text main__text--14 main__text--80alpha">Transportation</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color transportation"></div>
                                             <p class="main__text main__text--bold main__text--18">15%</p>
                                         </div>
                                     </li>
-                                    <li class="main__item">
+                                    <li class="main__item" id="miscellaneous">
                                         <p class="main__text main__text--14 main__text--80alpha">Miscellaneous</p>
                                         <div class="main__item-bottom">
                                             <div class="main__color miscellaneous"></div>
@@ -112,7 +129,7 @@
                             class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>
                     </p>
                     <p class="main__text main__text--14 main__text--80alpha">You got $<span
-                            class="amountLeft">1,575,77</span> left this month</p>
+                            id="amountLeft">1,575,77</span> left this month</p>
                 </div>
                 <div class="main__container main__container--last main__container--740">
                     <div class="main__container-top-last display-flex justify-between">
@@ -179,37 +196,58 @@
                     </div>
                     <ul class="main__revenue-list">
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--1200">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">May</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--1700">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Jun</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--800">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Jul</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--2100">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Aug</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--1200">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Sept</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--1700">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Oct</p>
                         </li>
                         <li class="main__revenue-item">
-                            <div class="main__revenue-box main__revenue-box--800">
+                            <div class="main__revenue-box">
+                                <p class="main__revenue-price">
+                                    <span class="revenue-amount"></span>
+                                </p>
                             </div>
                             <p class="main__text main__text--16 main__text--80alpha">Nov</p>
                         </li>
@@ -217,8 +255,8 @@
                 </div>
                 <div class="main__container main__container--sub main__container--440">
                     <div class="justify-between display-flex main__container-top-subs">
-                        <h2 class="main__title">Subscriptions<sup
-                                class="main__text main__text--bold main__text--16">3</sup></h2>
+                        <h2 class="main__title">Subscriptions<sup class="main__text main__text--bold main__text--16"
+                                id="totalSubs">0</sup></h2>
                         <p class="main__text main__text--36 main__text--60alpha main__text--hover">+</p>
                     </div>
                     <ul class="main__subsbox">
@@ -258,3 +296,19 @@
         </div>
     </div>
 </main>
+<div class="add__popup hidden">
+    <input type="number" id="addIncomeInput">
+    <button id="addIncome">Add</button>
+</div>
+<div class="expense__popup hidden">
+    <select name="" id="expenseType">
+        <option value="food">Food</option>
+        <option value="health">Health</option>
+        <option value="bills">Bills</option>
+        <option value="entertainment">Entertainment</option>
+        <option value="transportation">Transportation</option>
+        <option value="miscellaneous">Miscellaneous</option>
+    </select>
+    <input type="number" id="addExpenseInput">
+    <button id="addExpense">Add</button>
+</div>

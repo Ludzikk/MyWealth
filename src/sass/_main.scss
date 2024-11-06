@@ -53,6 +53,7 @@
 
 	&__revenue {
 		&-list {
+			padding-top: 2em;
 			display: flex;
 			align-items: flex-end;
 			height: 180px;
@@ -62,11 +63,11 @@
 			&::-webkit-scrollbar-track {
 				background-color: #333;
 			}
-		
+
 			&::-webkit-scrollbar {
 				height: 4px;
 			}
-		
+
 			&::-webkit-scrollbar-thumb {
 				background-color: white;
 			}
@@ -78,73 +79,25 @@
 			width: 80px;
 			border-radius: 10px;
 			background: $revenue-box;
+			overflow: hidden;
+		}
 
-			&--1200 {
-				height: 100px;
-
-				&::after {
-					content: "+$1.2K";
-					position: absolute;
-					bottom: 10px;
-					left: 50%;
-					transform: translate(-50%);
-					font-size: 1.4rem;
-					font-weight: bold;
-					letter-spacing: 0.3px;
-				}
-			}
-
-			&--1700 {
-				height: 120px;
-
-				&::after {
-					content: "+$1.7K";
-					position: absolute;
-					bottom: 10px;
-					left: 50%;
-					transform: translate(-50%);
-					font-size: 1.4rem;
-					font-weight: bold;
-					letter-spacing: 0.3px;
-				}
-			}
-
-			&--2100 {
-				height: 150px;
-
-				&::after {
-					content: "+$2.1K";
-					position: absolute;
-					bottom: 10px;
-					left: 50%;
-					transform: translate(-50%);
-					font-size: 1.4rem;
-					font-weight: bold;
-					letter-spacing: 0.3px;
-				}
-			}
-
-			&--800 {
-				height: 60px;
-
-				&::after {
-					content: "+$0.8k";
-					position: absolute;
-					bottom: 10px;
-					left: 50%;
-					transform: translate(-50%);
-					font-size: 1.4rem;
-					font-weight: bold;
-					letter-spacing: 0.3px;
-				}
-			}
+		&-price {
+			position: absolute;
+			left: 50%;
+			bottom: 5px;
+			transform: translate(-50%);
+			font-size: 1.4rem;
+			font-weight: bold;
 		}
 
 		&-item {
 			margin: 0 0.7em;
 			display: flex;
 			flex-direction: column;
+			justify-content: flex-end;
 			align-items: center;
+			height: 100%;
 		}
 	}
 
@@ -167,7 +120,11 @@
 
 	&__last {
 		&-list {
-			max-width: 400px;
+			display: flex;
+			flex-direction: column;
+			max-width: 500px;
+			max-height: calc(32px * 5);
+			overflow: hidden;
 		}
 
 		&-item {
@@ -256,7 +213,7 @@
 			padding-bottom: 2.5em;
 
 			&-last {
-				max-width: 400px;
+				max-width: 500px;
 				padding-bottom: 2em;
 			}
 
@@ -376,6 +333,10 @@
 
 		&--bold {
 			font-weight: bold;
+		}
+
+		&--upcase {
+			text-transform: capitalize;
 		}
 
 		&--hover {

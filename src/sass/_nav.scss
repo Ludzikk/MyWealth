@@ -40,7 +40,7 @@
 		font-size: 1.8rem;
 		font-weight: bold;
 		letter-spacing: 0.7px;
-		
+
 		&-container {
 			margin-top: 2.5em;
 			width: 80px;
@@ -67,3 +67,84 @@
 
 @media (min-width: 1200px) {
 }
+
+.login {
+	position: fixed;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $body-color;
+	z-index: 100;
+
+	&__logo {
+		margin-bottom: 2em;
+		width: 100px;
+		object-fit: cover;
+		filter: drop-shadow(0px 0px 5px rgba(255, 255, 255, 0.5));
+	}
+
+	&__box {
+		padding: 0 3em;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		max-width: 400px;
+		width: 100%;
+	}
+
+	&__buttons {
+		margin-bottom: 0.5em;
+		display: flex;
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	&__topbtn {
+		font-size: 1.6rem;
+		border: none;
+		background: none;
+		color: $text-second-color;
+		cursor: pointer;
+
+		&--mr {
+			margin-right: 1em;
+		}
+	}
+
+	&__bottom {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
+
+	&__input {
+		margin: 0.25em 0;
+		padding: 0.25em;
+		width: 100%;
+		font-size: 1.6rem;
+		border-radius: 5px;
+		color: $text-black-color;
+	}
+
+	&__mainbtn {
+		padding: 0.25em 0;
+		margin-top: 0.5em;
+		font-size: 1.8rem;
+		border: none;
+		border-radius: 5px;
+		background: rgb(216, 185, 255);
+		box-shadow: 0px 4px 4px black;
+		color: $text-black-color;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	&-btn-active {
+		color: rgb(255, 255, 255);
+	}
+}
+
