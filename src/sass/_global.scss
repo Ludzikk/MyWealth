@@ -6,6 +6,10 @@
 	width: 100%;
 }
 
+.scroll-hidden {
+	overflow-y: hidden;
+}
+
 .hidden {
 	display: none;
 }
@@ -62,9 +66,9 @@
 	right: 0;
 }
 
-.add__popup {
+.add__popup, .expense__popup, .sub__popup, .subchange__popup {
 	padding: 2em;
-	position: absolute;
+	position: fixed;
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
@@ -77,19 +81,8 @@
 	}
 }
 
-.expense__popup {
-	padding: 2em;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background-color: black;
-	z-index: 100;
-
-	button, input {
-		font-size: 2rem;
-		color: black;
-	}
+.sub-active {
+	transform: translateX(0);
 }
 
 @media (min-width: 576px){
