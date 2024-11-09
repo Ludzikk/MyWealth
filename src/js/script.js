@@ -74,6 +74,7 @@ const userEmail = document.querySelector("#profile__email");
 const profileLimitInput = document.querySelector(".profile__input");
 const currencySelect = document.querySelector("#currencySelect");
 const profileOptions = document.querySelectorAll(".profile__option");
+const loadingBox = document.querySelector(".loading");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
@@ -1421,6 +1422,7 @@ setEventListeners();
 
 const setEverything = async () => {
 	loginBox.classList.add("hidden");
+	loadingBox.style.display = "flex";
 
 	await Promise.all([
 		checkIfSubsGotPayed(),
@@ -1440,7 +1442,6 @@ const setEverything = async () => {
 };
 
 const appLoaded = () => {
-	const loadingBox = document.querySelector(".loading");
 	loadingBox.style.display = "none";
 	document.body.classList.remove("scroll-hidden");
 };
