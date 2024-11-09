@@ -553,21 +553,25 @@ const setCurrentIncomeAndExpense = () => {
 };
 
 const setTotalBalance = () => {
-	auth.onAuthStateChanged((user) => {
-		if (user) {
-			const userId = user.uid;
-			let totalUserBalance = 0; // Reset total balance for this calculation
+	return new Promise((resolve, reject) => {
+		auth.onAuthStateChanged((user) => {
+			if (user) {
+				const userId = user.uid;
+				let totalUserBalance = 0; // Reset total balance for this calculation
 
-			// Retrieve all years
-			get(ref(db, `users/${userId}/money`))
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						snapshot.forEach((yearSnapshot) => {
-							const yearKey = yearSnapshot.key;
+				// Pobierz wszystkie lata
+				get(ref(db, `users/${userId}/money`))
+					.then((snapshot) => {
+						if (snapshot.exists()) {
+							// Zbierz promisy dla wszystkich lat
+							const yearPromises = [];
+							snapshot.forEach((yearSnapshot) => {
+								const yearKey = yearSnapshot.key;
 
-							// Retrieve all months within the year
-							get(ref(db, `users/${userId}/money/${yearKey}`))
-								.then((monthsSnapshot) => {
+								// Dodaj promisy dla każdego roku
+								const yearPromise = get(
+									ref(db, `users/${userId}/money/${yearKey}`)
+								).then((monthsSnapshot) => {
 									monthsSnapshot.forEach((monthSnapshot) => {
 										const monthData = monthSnapshot.val();
 										if (
@@ -575,59 +579,71 @@ const setTotalBalance = () => {
 											monthData.income !== undefined &&
 											monthData.expense !== undefined
 										) {
-											// Calculate net balance for the month (income - expense)
+											// Oblicz miesięczny bilans netto (income - expense)
 											const netBalance = monthData.income - monthData.expense;
 											totalUserBalance += netBalance;
 										}
 									});
+								});
 
-									// Update total balance display once per year
+								yearPromises.push(yearPromise);
+							});
+
+							// Poczekaj na zakończenie wszystkich promisy dla lat
+							Promise.all(yearPromises)
+								.then(() => {
+									// Zaktualizuj wyświetlanie całkowitego bilansu
 									totalBalance.textContent = `${formatNumber(
 										totalUserBalance
 									)}`;
+									resolve();
 								})
 								.catch((error) => {
 									console.error("Error reading month data: ", error);
+									reject(error);
 								});
-						});
-					} else {
-						console.log("No data found for user");
-					}
-				})
-				.catch((error) => {
-					console.error("Error reading user data: ", error);
-				});
+						} else {
+							resolve(); // Brak danych do przetworzenia
+						}
+					})
+					.catch((error) => {
+						console.error("Error reading user data: ", error);
+						reject(error);
+					});
 
-			// Retrieve net balance for last month as a separate task
-			const currentYear = new Date().getFullYear();
-			const previousMonth = new Date().getMonth(); // Previous month (0-based)
+				// Pobierz bilans netto za poprzedni miesiąc jako osobne zadanie
+				const currentYear = new Date().getFullYear();
+				const previousMonth = new Date().getMonth(); // Poprzedni miesiąc (indeksowany od 0)
 
-			get(
-				ref(
-					db,
-					`users/${userId}/money/year${currentYear}/month${previousMonth}`
+				get(
+					ref(
+						db,
+						`users/${userId}/money/year${currentYear}/month${previousMonth}`
+					)
 				)
-			)
-				.then((snapshot) => {
-					if (snapshot.exists()) {
-						const monthData = snapshot.val();
-						if (
-							monthData.income !== undefined &&
-							monthData.expense !== undefined
-						) {
-							const netLastMonth = monthData.income - monthData.expense;
-							revenueLastMonth.textContent = formatNumber(netLastMonth);
+					.then((snapshot) => {
+						if (snapshot.exists()) {
+							const monthData = snapshot.val();
+							if (
+								monthData.income !== undefined &&
+								monthData.expense !== undefined
+							) {
+								const netLastMonth = monthData.income - monthData.expense;
+								revenueLastMonth.textContent = formatNumber(netLastMonth);
+							} else {
+								revenueLastMonth.textContent = 0;
+							}
 						} else {
 							revenueLastMonth.textContent = 0;
 						}
-					} else {
-						revenueLastMonth.textContent = 0;
-					}
-				})
-				.catch((error) => {
-					console.error("Error fetching data:", error);
-				});
-		}
+					})
+					.catch((error) => {
+						console.error("Error fetching last month data:", error);
+					});
+			} else {
+				reject("User not authenticated");
+			}
+		});
 	});
 };
 
@@ -1316,17 +1332,23 @@ const setProfileInfo = () => {
 };
 
 const setCurrency = () => {
-	auth.onAuthStateChanged((user) => {
-		const currencySpan = document.querySelectorAll(".currency");
-		const currencyRef = ref(db, `users/${user.uid}/currency`);
+	return new Promise((resolve, reject) => {
+		auth.onAuthStateChanged((user) => {
+			const currencySpan = document.querySelectorAll(".currency");
+			const currencyRef = ref(db, `users/${user.uid}/currency`);
 
-		// set currency on whole site based on user currency in database
-		onValue(currencyRef, (snapshot) => {
-			if (snapshot.exists()) {
-				currencySpan.forEach((item) => {
-					item.textContent = snapshot.val();
-				});
-			}
+			// Nasłuchiwanie danych przy użyciu `onValue`
+			onValue(currencyRef, (snapshot) => {
+				if (snapshot.exists()) {
+					currencySpan.forEach((item) => {
+						item.textContent = snapshot.val();
+					});
+					// Zakończenie Promise po pierwszym ustawieniu wartości
+					resolve();
+				} else {
+					reject("No currency data found");
+				}
+			});
 		});
 	});
 };
@@ -1369,7 +1391,7 @@ const changeCurrency = () => {
 		const userRef = ref(db, `users/${user.uid}`);
 
 		update(userRef, {
-			currency: currencySelect.value
+			currency: currencySelect.value,
 		});
 	});
 };
@@ -1397,20 +1419,30 @@ const setEventListeners = () => {
 
 setEventListeners();
 
-const setEverything = () => {
+const setEverything = async () => {
 	loginBox.classList.add("hidden");
+
+	await Promise.all([
+		checkIfSubsGotPayed(),
+		checkIfUserNeedNewDateInDataBase(),
+		setItemsToSubBox(),
+		setCurrentIncomeAndExpense(),
+		setTotalBalance(),
+		setBudgetSpentBox(),
+		setExpenseSplit(),
+		createRevenueFlow(),
+		createLastSpendings(),
+		setProfileInfo(),
+		setCurrency(),
+	]);
+
+	appLoaded();
+};
+
+const appLoaded = () => {
+	const loadingBox = document.querySelector(".loading");
+	loadingBox.style.display = "none";
 	document.body.classList.remove("scroll-hidden");
-	checkIfSubsGotPayed();
-	checkIfUserNeedNewDateInDataBase();
-	setItemsToSubBox();
-	setCurrentIncomeAndExpense();
-	setTotalBalance();
-	setBudgetSpentBox();
-	setExpenseSplit();
-	createRevenueFlow();
-	createLastSpendings();
-	setProfileInfo();
-	setCurrency();
 };
 
 window.onload = () => {

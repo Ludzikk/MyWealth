@@ -60,13 +60,16 @@
 	position: relative;
 }
 
-.plus-btn{
+.plus-btn {
 	position: absolute;
 	top: 0;
 	right: 0;
 }
 
-.add__popup, .expense__popup, .sub__popup, .subchange__popup {
+.add__popup,
+.expense__popup,
+.sub__popup,
+.subchange__popup {
 	padding: 2em;
 	position: fixed;
 	top: 50%;
@@ -75,7 +78,8 @@
 	background-color: black;
 	z-index: 100;
 
-	button, input {
+	button,
+	input {
 		font-size: 2rem;
 		color: black;
 	}
@@ -85,7 +89,36 @@
 	transform: translateX(0);
 }
 
-@media (min-width: 576px){
+.loading {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background-color: $body-color;
+	z-index: 1000;
+}
+
+.loader {
+	border: 16px solid #f3f3f3; /* Light grey */
+	border-top: 16px solid #3498db; /* Blue */
+	border-radius: 50%;
+	width: 120px;
+	height: 120px;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+@media (min-width: 576px) {
 	.main {
 		&__container {
 			&--30 {
