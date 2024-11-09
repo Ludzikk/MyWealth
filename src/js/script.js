@@ -70,6 +70,10 @@ const signoutBtn = document.querySelector("#signout");
 const profileBtn = document.querySelector("#profile");
 const overviewBtn = document.querySelector("#overview");
 const revenueBoxScroll = document.querySelector(".main__revenue-list");
+const userEmail = document.querySelector("#profile__email");
+const profileLimitInput = document.querySelector(".profile__input");
+const currencySelect = document.querySelector("#currencySelect");
+const profileOptions = document.querySelectorAll(".profile__option");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
@@ -289,7 +293,7 @@ const setItemsToSubBox = () => {
 					subBgIcon.classList.add("fa-solid", "fa-x", "sub-x");
 
 					subItemName.textContent = childData.name;
-					subItemPrice.textContent = "$" + childData.price;
+					subItemPrice.innerHTML = `${childData.price}<span class="currency"></span>`;
 
 					const paymentDate = new Date(childData.dateOfPay);
 					subItemNextPayment.textContent = `Next ${paymentDate.getDate()} ${
@@ -321,6 +325,7 @@ const setItemsToSubBox = () => {
 				});
 			}
 			totalSubs.textContent = subsriptionBox.childElementCount;
+			setCurrency();
 		});
 	});
 };
@@ -1261,7 +1266,7 @@ const createLastSpendings = () => {
 					  <p class="main__text main__text--18 main__text--80alpha">${childData.date}</p>
 						  </div>
 							 <div class="main__container--30">
-								 <p class="main__text main__text--20 main__text--bold">-$${childData.price}</p>
+								 <p class="main__text main__text--20 main__text--bold">-${childData.price}<span class="currency"></span></p>
 								  <i class="fa-solid fa-ellipsis-vertical"></i>
 										</div> `;
 					lastSpendings.append(item);
@@ -1269,6 +1274,58 @@ const createLastSpendings = () => {
 				});
 			} else {
 				console.log("Snapshot for creating last spendings don't exist");
+			}
+			setCurrency();
+		});
+	});
+};
+
+const setProfileInfo = () => {
+	auth.onAuthStateChanged((user) => {
+		const emailRef = ref(db, `users/${user.uid}/email`);
+		const limitRef = ref(db, `users/${user.uid}/limit`);
+		const currencyRef = ref(db, `users/${user.uid}/currency`);
+
+		// set user email info on profile tab
+		onValue(emailRef, (snapshot) => {
+			if (snapshot.exists()) {
+				userEmail.textContent = snapshot.val();
+			}
+		});
+
+		// set user limit in input
+		onValue(limitRef, (snapshot) => {
+			if (snapshot.exists()) {
+				profileLimitInput.value = snapshot.val();
+			}
+		});
+
+		// set user currency in select
+		onValue(currencyRef, (snapshot) => {
+			if (snapshot.exists()) {
+				profileOptions.forEach((option) => {
+					if (option.value == snapshot.val()) {
+						option.selected = true;
+					} else {
+						option.selected = false;
+					}
+				});
+			}
+		});
+	});
+};
+
+const setCurrency = () => {
+	auth.onAuthStateChanged((user) => {
+		const currencySpan = document.querySelectorAll(".currency");
+		const currencyRef = ref(db, `users/${user.uid}/currency`);
+
+		// set currency on whole site based on user currency in database
+		onValue(currencyRef, (snapshot) => {
+			if (snapshot.exists()) {
+				currencySpan.forEach((item) => {
+					item.textContent = snapshot.val();
+				});
 			}
 		});
 	});
@@ -1297,6 +1354,26 @@ function changeSite() {
 	}
 }
 
+const changeLimit = () => {
+	auth.onAuthStateChanged((user) => {
+		const userRef = ref(db, `users/${user.uid}`);
+
+		update(userRef, {
+			limit: parseInt(profileLimitInput.value),
+		});
+	});
+};
+
+const changeCurrency = () => {
+	auth.onAuthStateChanged((user) => {
+		const userRef = ref(db, `users/${user.uid}`);
+
+		update(userRef, {
+			currency: currencySelect.value
+		});
+	});
+};
+
 const setEventListeners = () => {
 	loginTopBtn.forEach((btn) => {
 		btn.addEventListener("click", setInputType);
@@ -1314,6 +1391,8 @@ const setEventListeners = () => {
 	overviewBtn.addEventListener("click", changeSite);
 	profileBtn.addEventListener("click", changeSite);
 	signoutBtn.addEventListener("click", signoutUser);
+	profileLimitInput.addEventListener("change", changeLimit);
+	currencySelect.addEventListener("change", changeCurrency);
 };
 
 setEventListeners();
@@ -1330,6 +1409,8 @@ const setEverything = () => {
 	setExpenseSplit();
 	createRevenueFlow();
 	createLastSpendings();
+	setProfileInfo();
+	setCurrency();
 };
 
 window.onload = () => {

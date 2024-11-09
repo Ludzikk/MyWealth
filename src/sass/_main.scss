@@ -518,6 +518,13 @@ sup {
 	top: -5px;
 }
 
+.profile {
+	&__input, &__button, &__select {
+		font-size: 1.8rem;
+		color: black;
+	}
+}
+
 @media (min-width: 576px) {
 	.main {
 		&__container {

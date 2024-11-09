@@ -220,7 +220,23 @@
             </div>
         </div>
         <div class="main__profile hidden">
-            <button class="profile__button" id="signout">Sign out</button>
+            <div class="main__container main__profile">
+                <p class="main__text main__text--24">Your email: <span id="profile__email"></span></p>
+                <div class="profile__inputbox">
+                    <p class="main__text main__text--18">Your limit:</p>
+                    <input class="profile__input" type="number" placeholder="Spending limit">
+                </div>
+                <div class="profile__inputbox">
+                    <p class="main__text main__text--18">Your currency:</p>
+                    <select class="profile__select" name="" id="currencySelect">
+                        <option class="profile__option" value="$">usd($)</option>
+                        <option class="profile__option" value="€">eur(€)</option>
+                        <option class="profile__option" value="£">gbp(£)</option>
+                        <option class="profile__option" value="zł">pln(zł)</option>
+                    </select>
+                </div>
+                <button class="profile__button" id="signout">Sign out</button>
+            </div>
         </div>
     </div>
 </main>
