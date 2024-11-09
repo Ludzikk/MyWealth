@@ -93,11 +93,11 @@
 	position: fixed;
 	width: 100vw;
 	height: 100vh;
-	display: none;
+	display: flex;
 	justify-content: center;
 	align-items: center;
 	background-color: $body-color;
-	z-index: 1000;
+	z-index: 3;
 }
 
 .loader {

@@ -75,6 +75,7 @@ const profileLimitInput = document.querySelector(".profile__input");
 const currencySelect = document.querySelector("#currencySelect");
 const profileOptions = document.querySelectorAll(".profile__option");
 const loadingBox = document.querySelector(".loading");
+const loader = document.querySelector(".loader");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
@@ -159,9 +160,12 @@ const checkUserAuth = () => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			// Jeśli użytkownik jest zalogowany, ustaw wszystko
+			loginBox.classList.add("hidden")
+			loader.classList.remove("hidden")
 			setEverything();
 			console.log("User is already logged in:", user.email);
 		} else {
+			loginBox.classList.remove("hidden")
 			console.log("No user is logged in");
 		}
 	});
@@ -1445,6 +1449,7 @@ const appLoaded = () => {
 	loadingBox.style.display = "none";
 	document.body.classList.remove("scroll-hidden");
 };
+
 
 window.onload = () => {
 	checkUserAuth();
