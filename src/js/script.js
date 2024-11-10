@@ -300,11 +300,9 @@ const setItemsToSubBox = () => {
 					subItemName.textContent = childData.name;
 					subItemPrice.innerHTML = `${childData.price}<span class="currency"></span>`;
 
-					// Przykładowe dane: "2024, 12, 9"
 					const [year, month, day] = childData.dateOfPay.split(",").map(Number);
 					const paymentDate = new Date(year, month - 1, day); // Miesiące są indeksowane od 0 (styczeń to 0)
 
-					// Ustawienie tekstu
 					subItemNextPayment.textContent = `Next ${paymentDate.getDate()} ${
 						monthNames[paymentDate.getMonth()]
 					}`;
@@ -1139,18 +1137,17 @@ const addSub = () => {
 				`users/${user.uid}/money/year${year}/month${month}/expense`
 			);
 
-			// Tworzenie daty zakupu w formacie 'YYYY-MM-DD'
-			const boughtDateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
-			const boughtDate = new Date(boughtDateString);
+			const boughtDate = new Date(
+				`${year}`,
+				`${month}`,
+				`${currentDate.getDate()}`
+			);
+			const nextPaymentDate = new Date(
+				boughtDate.setMonth(
+					boughtDate.getMonth() + parseInt(subPayementInput.value)
+				)
+			);
 
-			// Tworzenie daty następnej płatności na podstawie interwału miesięcznego
-			const nextPaymentDate = new Date(boughtDate);
-			nextPaymentDate.setMonth(nextPaymentDate.getMonth() + parseInt(subPayementInput.value));
-
-			// Tworzenie daty następnej płatności w formacie 'YYYY-MM-DD'
-			const nextPaymentDateString = `${nextPaymentDate.getFullYear()}-${(nextPaymentDate.getMonth() + 1).toString().padStart(2, '0')}-${nextPaymentDate.getDate().toString().padStart(2, '0')}`;
-
-			// Zapis do bazy danych
 			update(
 				ref(
 					db,
@@ -1159,13 +1156,14 @@ const addSub = () => {
 				{
 					name: subNameInput.value,
 					price: subPriceInput.value,
-					dateOfBuy: boughtDateString,
+					dateOfBuy: `${year}, ${month}, ${currentDate.getDate()}`,
 					paymentIntervalInMonths: subPayementInput.value,
-					dateOfPay: nextPaymentDateString,
+					dateOfPay: `${nextPaymentDate.getFullYear()}, ${
+						nextPaymentDate.getMonth() + 1
+					}, ${nextPaymentDate.getDate()}`,
 				}
 			);
 
-			// Aktualizacja wydatków
 			get(expenseRef)
 				.then((snapshot) => {
 					if (snapshot.exists()) {
@@ -1177,11 +1175,11 @@ const addSub = () => {
 						);
 					}
 				})
-				.then(() => {
+				.then(
 					get(
 						ref(
 							db,
-							`users/${user.uid}/money/year${year}/month${month}/types/${expenseSelect.value}`
+							`users/${user.uid}/money/year${year}/month${month}/types/miscellaneous`
 						)
 					).then((snapshot) => {
 						update(
@@ -1193,14 +1191,14 @@ const addSub = () => {
 								miscellaneous: snapshot.val() + parseFloat(subPriceInput.value),
 							}
 						);
-					});
-				});
+						console.log(snapshot.val(), " + ", parseFloat(subPriceInput.value));
+					})
+				);
 		}
 
 		toggleAddSub();
 	});
 };
-
 
 const changeSub = () => {
 	if (subChangeNameInput.value !== "" && subChangePriceInput.value !== "") {
