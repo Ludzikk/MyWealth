@@ -1139,15 +1139,18 @@ const addSub = () => {
 				`users/${user.uid}/money/year${year}/month${month}/expense`
 			);
 
-			const boughtDate = new Date(
-				`${year}, ${month}, ${currentDate.getDate()}`
-			);
-			const nextPaymentDate = new Date(
-				boughtDate.setMonth(
-					boughtDate.getMonth() + parseInt(subPayementInput.value)
-				)
-			);
+			// Tworzenie daty zakupu w formacie 'YYYY-MM-DD'
+			const boughtDateString = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+			const boughtDate = new Date(boughtDateString);
 
+			// Tworzenie daty następnej płatności na podstawie interwału miesięcznego
+			const nextPaymentDate = new Date(boughtDate);
+			nextPaymentDate.setMonth(nextPaymentDate.getMonth() + parseInt(subPayementInput.value));
+
+			// Tworzenie daty następnej płatności w formacie 'YYYY-MM-DD'
+			const nextPaymentDateString = `${nextPaymentDate.getFullYear()}-${(nextPaymentDate.getMonth() + 1).toString().padStart(2, '0')}-${nextPaymentDate.getDate().toString().padStart(2, '0')}`;
+
+			// Zapis do bazy danych
 			update(
 				ref(
 					db,
@@ -1156,14 +1159,13 @@ const addSub = () => {
 				{
 					name: subNameInput.value,
 					price: subPriceInput.value,
-					dateOfBuy: `${year}, ${month}, ${currentDate.getDate()}`,
+					dateOfBuy: boughtDateString,
 					paymentIntervalInMonths: subPayementInput.value,
-					dateOfPay: `${nextPaymentDate.getFullYear()}, ${
-						nextPaymentDate.getMonth() + 1
-					}, ${nextPaymentDate.getDate()}`,
+					dateOfPay: nextPaymentDateString,
 				}
 			);
 
+			// Aktualizacja wydatków
 			get(expenseRef)
 				.then((snapshot) => {
 					if (snapshot.exists()) {
@@ -1175,7 +1177,7 @@ const addSub = () => {
 						);
 					}
 				})
-				.then(
+				.then(() => {
 					get(
 						ref(
 							db,
@@ -1191,13 +1193,14 @@ const addSub = () => {
 								miscellaneous: snapshot.val() + parseFloat(subPriceInput.value),
 							}
 						);
-					})
-				);
+					});
+				});
 		}
 
 		toggleAddSub();
 	});
 };
+
 
 const changeSub = () => {
 	if (subChangeNameInput.value !== "" && subChangePriceInput.value !== "") {
