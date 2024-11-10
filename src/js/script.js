@@ -160,12 +160,12 @@ const checkUserAuth = () => {
 	onAuthStateChanged(auth, (user) => {
 		if (user) {
 			// Jeśli użytkownik jest zalogowany, ustaw wszystko
-			loginBox.classList.add("hidden")
-			loader.classList.remove("hidden")
+			loginBox.classList.add("hidden");
+			loader.classList.remove("hidden");
 			setEverything();
 			console.log("User is already logged in:", user.email);
 		} else {
-			loginBox.classList.remove("hidden")
+			loginBox.classList.remove("hidden");
 			console.log("No user is logged in");
 		}
 	});
@@ -300,7 +300,11 @@ const setItemsToSubBox = () => {
 					subItemName.textContent = childData.name;
 					subItemPrice.innerHTML = `${childData.price}<span class="currency"></span>`;
 
-					const paymentDate = new Date(childData.dateOfPay);
+					// Przykładowe dane: "2024, 12, 9"
+					const [year, month, day] = childData.dateOfPay.split(",").map(Number);
+					const paymentDate = new Date(year, month - 1, day); // Miesiące są indeksowane od 0 (styczeń to 0)
+
+					// Ustawienie tekstu
 					subItemNextPayment.textContent = `Next ${paymentDate.getDate()} ${
 						monthNames[paymentDate.getMonth()]
 					}`;
@@ -1449,7 +1453,6 @@ const appLoaded = () => {
 	loadingBox.style.display = "none";
 	document.body.classList.remove("scroll-hidden");
 };
-
 
 window.onload = () => {
 	checkUserAuth();
