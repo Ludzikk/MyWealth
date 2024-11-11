@@ -164,7 +164,7 @@ const checkWhatTypeOfAction = () => {
 	}
 };
 
-// this function check if user is loged in 
+// this function check if user is loged in
 const checkUserAuth = () => {
 	onAuthStateChanged(auth, (user) => {
 		// if user ever logged in it will automatically login him
@@ -224,8 +224,7 @@ const createUser = () => {
 
 				switch (errorCode) {
 					case "auth/email-already-in-use":
-						displayMessage =
-							"This e-mail is in use by other account.";
+						displayMessage = "This e-mail is in use by other account.";
 						emailError.textContent = displayMessage;
 						break;
 					case "auth/invalid-email":
@@ -267,8 +266,7 @@ const loginUser = () => {
 
 				switch (errorCode) {
 					case "auth/invalid-credential":
-						displayMessage =
-							"Wrong login info.";
+						displayMessage = "Wrong login info.";
 						emailError.textContent = displayMessage;
 						break;
 					default:
@@ -279,7 +277,7 @@ const loginUser = () => {
 	}
 };
 
-// we allow user to signout 
+// we allow user to signout
 const signoutUser = () => {
 	signOut(auth)
 		.then(() => {
@@ -290,7 +288,7 @@ const signoutUser = () => {
 		});
 };
 
-// create items to subbox 
+// create items to subbox
 const setItemsToSubBox = () => {
 	auth.onAuthStateChanged((user) => {
 		const subsRef = ref(db, `users/${user.uid}/subs`);
@@ -346,7 +344,7 @@ const setItemsToSubBox = () => {
 					subItemPrice.innerHTML = `${childData.price}<span class="currency"></span>`;
 
 					const [year, month, day] = childData.dateOfPay.split(",").map(Number);
-					const paymentDate = new Date(year, month - 1, day); // -1 becouse months in js start from index 0 
+					const paymentDate = new Date(year, month - 1, day); // -1 becouse months in js start from index 0
 
 					subItemNextPayment.textContent = `Next ${paymentDate.getDate()} ${
 						monthNames[paymentDate.getMonth()]
@@ -600,9 +598,8 @@ const setTotalBalance = () => {
 						reject(error);
 					});
 
-				
 				const currentYear = new Date().getFullYear();
-				const previousMonth = new Date().getMonth(); 
+				const previousMonth = new Date().getMonth();
 
 				get(
 					ref(
@@ -1035,10 +1032,11 @@ const addIncome = () => {
 						income: snapshot.val() + parseFloat(addIncomeInput.value),
 					});
 				}
+				addIncomeInput.value = "";
 			});
 		});
 
-		toggleAddIncomePopup();
+		resetAllPopups();
 		setTotalBalance();
 		setCurrentIncomeAndExpense();
 	}
@@ -1094,11 +1092,12 @@ const addExpense = () => {
 								},
 							}
 						);
+						addExpenseInput.value = "";
 					})
 				);
 		});
 
-		toggleAddExpensePopup();
+		resetAllPopups();
 		setTotalBalance();
 		setCurrentIncomeAndExpense();
 		setExpenseSplit();
@@ -1172,11 +1171,14 @@ const addSub = () => {
 								miscellaneous: snapshot.val() + parseFloat(subPriceInput.value),
 							}
 						);
+						subNameInput.value = "";
+						subPriceInput.value = "";
+						subPayementInput.value = "";
 					})
 				);
 		}
 
-		toggleAddSub();
+		resetAllPopups();
 	});
 };
 
@@ -1243,7 +1245,7 @@ const changeSub = () => {
 				});
 		});
 
-		subChangePopup.classList.toggle("hidden");
+		resetAllPopups();
 		setTotalBalance();
 	}
 };
@@ -1350,7 +1352,7 @@ const setCurrency = () => {
 					currencySpan.forEach((item) => {
 						item.textContent = snapshot.val();
 					});
-					
+
 					resolve();
 				} else {
 					reject("No currency data found");
