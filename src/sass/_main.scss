@@ -23,15 +23,7 @@
 		width: 150px;
 		height: 150px;
 		border-radius: 50%;
-		background: conic-gradient(
-			$food 0 10%,
-			$health 0 30%,
-			$bills 0 45%,
-			$entertainment 0 65%,
-			$transportation 0 90%,
-			$miscellaneous 0 100%,
-			rgba(0, 0, 0, 0.1) 100% 100%
-		);
+		background: conic-gradient(rgba(255, 255, 255, 0.1) 100% 100%);
 
 		&-inner {
 			position: absolute;
@@ -64,29 +56,27 @@
 				--sb-track-color: #272b2f;
 				--sb-thumb-color: #ffffff;
 				--sb-size: 6px;
-			  }
-			  
-			  &::-webkit-scrollbar {
-				height: var(--sb-size)
-			  }
-			  
-			  &::-webkit-scrollbar-track {
+			}
+
+			&::-webkit-scrollbar {
+				height: var(--sb-size);
+			}
+
+			&::-webkit-scrollbar-track {
 				background: var(--sb-track-color);
 				border-radius: 3px;
-			  }
-			  
-			  &::-webkit-scrollbar-thumb {
+			}
+
+			&::-webkit-scrollbar-thumb {
 				background: var(--sb-thumb-color);
 				border-radius: 3px;
-				
-			  }
-			  
-			  @supports not selector(::-webkit-scrollbar) {
+			}
+
+			@supports not selector(::-webkit-scrollbar) {
 				& {
-				  scrollbar-color: var(--sb-thumb-color)
-								   var(--sb-track-color);
+					scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
 				}
-			  }
+			}
 		}
 
 		&-box {
@@ -140,7 +130,35 @@
 			flex-direction: column;
 			max-width: 500px;
 			max-height: calc(32px * 5);
+			padding-right: 1em;
 			overflow: hidden;
+			overflow-y: auto;
+
+			& {
+				--sb-track-color: #272b2f;
+				--sb-thumb-color: #ffffff;
+				--sb-size: 6px;
+			}
+
+			&::-webkit-scrollbar {
+				width: var(--sb-size);
+			}
+
+			&::-webkit-scrollbar-track {
+				background: var(--sb-track-color);
+				border-radius: 3px;
+			}
+
+			&::-webkit-scrollbar-thumb {
+				background: var(--sb-thumb-color);
+				border-radius: 3px;
+			}
+
+			@supports not selector(::-webkit-scrollbar) {
+				& {
+					scrollbar-color: var(--sb-thumb-color) var(--sb-track-color);
+				}
+			}
 		}
 
 		&-item {
@@ -225,12 +243,18 @@
 				width: 30%;
 				font-size: 1.8rem;
 				font-weight: bold;
-				border: 1px solid red;
 				border-radius: 5px;
 				letter-spacing: 0.7px;
-				background: none;
+				border: none;
+				box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.1);
+				background: rgba(255, 255, 255, 0.1);
 				color: white;
 				cursor: pointer;
+				transition: background 0.5s;
+
+				&:hover {
+					background: rgba(255, 255, 255, 0.05);
+				}
 			}
 
 			&-btns {
@@ -398,7 +422,12 @@
 		}
 
 		&--hover {
+			transition: color 0.5s;
 			cursor: pointer;
+
+			&:hover {
+				color: $text-main-color;
+			}
 		}
 
 		&--80alpha {
@@ -505,6 +534,22 @@
 		background: $container-bg;
 		cursor: pointer;
 		z-index: 1;
+		transition: color 0.5s, background 0.5s;
+
+		&:hover {
+			color: $text-second-color;
+			background: $container-bg-hover;
+		}
+	}
+
+	&__profile {
+		max-width: 600px;
+		width: 100%;
+		margin: 0 auto;
+		height: auto;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
 	}
 }
 
@@ -518,10 +563,71 @@ sup {
 	top: -5px;
 }
 
+.fa-ellipsis-vertical {
+	transition: color 0.5s;
+
+	&:hover {
+		color: $text-main-color;
+	}
+}
+
 .profile {
-	&__input, &__button, &__select {
+	&__top {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+	}
+
+	&__inputbox {
+		margin: 0.5em 0;
+	}
+
+	&__input,
+	&__button,
+	&__select {
 		font-size: 1.8rem;
+		color: $text-main-color;
+	}
+
+	&__input {
+		padding: 0.5em;
+		margin: 0.5em 0;
+		border: 1px solid $text-main-color;
+		border-radius: 5px;
+		background: none;
+
+		&:focus {
+			background: rgba(255, 255, 255, 0.05);
+		}
+	}
+
+	&__select {
+		margin-top: 0.5em;
+		padding: 0.5em;
+		border: 1px solid $text-main-color;
+		border-radius: 5px;
+		background: none;
+	}
+
+	&__option {
 		color: black;
+	}
+
+	&__button {
+		margin-top: 0.5em;
+		margin-bottom: 2em;
+		padding: 0.4em 0.8em;
+		font-weight: bold;
+		border-radius: 10px;
+		border: none;
+		background: rgba(255, 255, 255, 0.1);
+		cursor: pointer;
+		transition: background 0.5s;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.2);
+		}
 	}
 }
 

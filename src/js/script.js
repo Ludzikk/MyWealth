@@ -76,10 +76,15 @@ const currencySelect = document.querySelector("#currencySelect");
 const profileOptions = document.querySelectorAll(".profile__option");
 const loadingBox = document.querySelector(".loading");
 const loader = document.querySelector(".loader");
+const resetPopupsBtns = document.querySelectorAll(".reset-popups");
+const popupsBg = document.querySelector(".popupsbg");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
 let currentChangeSubId = "";
+let spendingBtns = "";
+let spendingXBtns = "";
+let spendingDeleteBtns = "";
 
 const currentDate = new Date();
 const year = new Date().getFullYear();
@@ -337,12 +342,6 @@ const setItemsToSubBox = () => {
 	});
 };
 
-function subOptions() {
-	const itemBox = this.parentElement.parentElement;
-
-	itemBox.firstElementChild.classList.toggle("sub-active");
-}
-
 const checkIfSubsGotPayed = () => {
 	auth.onAuthStateChanged((user) => {
 		const subRef = ref(db, `users/${user.uid}/subs`);
@@ -375,68 +374,6 @@ const checkIfSubsGotPayed = () => {
 		});
 	});
 };
-
-function subType() {
-	auth.onAuthStateChanged((user) => {
-		const subsRef = ref(
-			db,
-			`users/${user.uid}/subs/${this.parentElement.parentElement.parentElement.id}`
-		);
-		const expenseRef = ref(
-			db,
-			`users/${user.uid}/money/year${year}/month${month}/expense`
-		);
-		const typesRef = ref(
-			db,
-			`users/${user.uid}/money/year${year}/month${month}/types`
-		);
-		const miscRef = ref(
-			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/miscellaneous`
-		);
-
-		switch (this.textContent) {
-			case "Delete":
-				get(subsRef).then((snapshot) => {
-					if (snapshot.exists()) {
-						const subData = snapshot.val();
-
-						get(expenseRef).then((snapshotExpense) => {
-							if (snapshotExpense.exists()) {
-								const currentExpense = snapshotExpense.val();
-
-								update(
-									ref(db, `users/${user.uid}/money/year${year}/month${month}`),
-									{
-										expense:
-											parseFloat(currentExpense) - parseFloat(subData.price),
-									}
-								);
-							}
-						});
-
-						get(miscRef).then((snapshotTypes) => {
-							if (snapshotTypes.exists()) {
-								update(typesRef, {
-									miscellaneous:
-										parseFloat(snapshotTypes.val()) - parseFloat(subData.price),
-								});
-							}
-						});
-
-						remove(subsRef);
-					}
-				});
-				break;
-			case "Edit":
-				toggleChangeSubPopup(this);
-				break;
-		}
-
-		const itemBox = this.parentElement.parentElement.parentElement;
-		itemBox.firstElementChild.classList.toggle("sub-active");
-	});
-}
 
 const setCurrentIncomeAndExpense = () => {
 	auth.onAuthStateChanged((user) => {
@@ -655,6 +592,7 @@ const setTotalBalance = () => {
 };
 
 const checkIfUserNeedNewDateInDataBase = () => {
+	let subsValue = 0;
 	auth.onAuthStateChanged((user) => {
 		get(ref(db, `users/${user.uid}/money/year${year}`)).then((snapshot) => {
 			if (snapshot.exists()) {
@@ -662,57 +600,66 @@ const checkIfUserNeedNewDateInDataBase = () => {
 				get(ref(db, `users/${user.uid}/money/year${year}/month${month}`)).then(
 					(snapshot) => {
 						if (!snapshot.exists()) {
-							update(ref(db, `users/${user.uid}/money/year${year}`), {
-								[`month${month}`]: {
-									income: 0,
-									expense: 0,
-									types: {
-										food: 0,
-										health: 0,
-										bills: 0,
-										entertainment: 0,
-										transportation: 0,
-										miscellaneous: 0,
-									},
-								},
-							});
+							get(ref(db, `users/${user.uid}/subs`))
+								.then((snapshot) => {
+									if (snapshot.exists()) {
+										snapshot.forEach((childSnapshot) => {
+											const childData = childSnapshot.val();
+											subsValue =
+												parseFloat(subsValue) + parseFloat(childData.price);
+										});
+									}
+								})
+								.then(() => {
+									update(ref(db, `users/${user.uid}/money/year${year}`), {
+										[`month${month}`]: {
+											income: 0,
+											expense: subsValue,
+											types: {
+												food: 0,
+												health: 0,
+												bills: 0,
+												entertainment: 0,
+												transportation: 0,
+												miscellaneous: subsValue,
+											},
+										},
+									});
+								});
 						}
 					}
 				);
 			} else {
 				// console.log("Need to create" + year + " year");
-				set(ref(db, `users/${user.uid}/money/year${year}/month${month}`), {
-					income: 0,
-					expense: 0,
-					types: {
-						food: 0,
-						health: 0,
-						bills: 0,
-						entertainment: 0,
-						transportation: 0,
-						miscellaneous: 0,
-					},
-				});
+				get(ref(db, `users/${user.uid}/subs`))
+					.then((snapshot) => {
+						if (snapshot.exists()) {
+							snapshot.forEach((childSnapshot) => {
+								const childData = childSnapshot.val();
+								subsValue = parseFloat(subsValue) + parseFloat(childData.price);
+							});
+						}
+					})
+					.then(() => {
+						set(ref(db, `users/${user.uid}/money/year${year}/month${month}`), {
+							income: 0,
+							expense: subsValue,
+							types: {
+								food: 0,
+								health: 0,
+								bills: 0,
+								entertainment: 0,
+								transportation: 0,
+								miscellaneous: subsValue,
+							},
+						});
+					});
+
 				checkIfUserNeedNewDateInDataBase();
 			}
 		});
 	});
 };
-
-function formatNumber(number) {
-	// Zamień liczbę na string z dwiema miejscami po przecinku
-	let formattedNumber = number.toFixed(2);
-
-	// Dodaj przecinki co trzy cyfry przed częścią dziesiętną
-	formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-	// Usuń ".00" jeśli liczba kończy się na ".00"
-	if (formattedNumber.endsWith(".00")) {
-		formattedNumber = formattedNumber.slice(0, -3);
-	}
-
-	return formattedNumber;
-}
 
 const setBudgetSpentBox = () => {
 	auth.onAuthStateChanged((user) => {
@@ -1011,33 +958,21 @@ const createRevenueFlow = () => {
 };
 
 const toggleAddIncomePopup = () => {
+	resetAllPopups();
 	addIncomePopup.classList.toggle("hidden");
+	popupsBg.classList.toggle("hidden")
 };
 
 const toggleAddExpensePopup = () => {
+	resetAllPopups();
 	addExpensePopup.classList.toggle("hidden");
+	popupsBg.classList.toggle("hidden")
 };
 
-function toggleChangeSubPopup(element) {
-	subChangePopup.classList.toggle("hidden");
-
-	auth.onAuthStateChanged((user) => {
-		const subsRef = ref(
-			db,
-			`users/${user.uid}/subs/${element.parentElement.parentElement.parentElement.id}`
-		);
-
-		get(subsRef).then((snapshot) => {
-			const subData = snapshot.val();
-			subChangeNameInput.value = subData.name;
-			subChangePriceInput.value = subData.price;
-		});
-		currentChangeSubId = element.parentElement.parentElement.parentElement.id;
-	});
-}
-
 const toggleAddSub = () => {
+	resetAllPopups();
 	addSubPopup.classList.toggle("hidden");
+	popupsBg.classList.toggle("hidden")
 };
 
 const addIncome = () => {
@@ -1191,7 +1126,6 @@ const addSub = () => {
 								miscellaneous: snapshot.val() + parseFloat(subPriceInput.value),
 							}
 						);
-						console.log(snapshot.val(), " + ", parseFloat(subPriceInput.value));
 					})
 				);
 		}
@@ -1283,8 +1217,9 @@ const createLastSpendings = () => {
 					const childData = childSnapshot.val();
 
 					const item = document.createElement("li");
-					item.classList.add("main__last-item");
+					item.classList.add("main__last-item", "posr");
 					item.style.order = `-${orderOfLastSpending}`;
+					item.id = childSnapshot.key;
 					item.innerHTML = `<div class="main__container--30">
 				<p class="main__text main__text--upcase main__text--20">${childData.type}</p>
 				</div>
@@ -1293,10 +1228,27 @@ const createLastSpendings = () => {
 						  </div>
 							 <div class="main__container--30">
 								 <p class="main__text main__text--20 main__text--bold">-${childData.price}<span class="currency"></span></p>
-								  <i class="fa-solid fa-ellipsis-vertical"></i>
-										</div> `;
+								  <i class="fa-solid fa-ellipsis-vertical spending-dots"></i>
+										</div> 
+										<div class="last__spendingbg">
+					<button class="last__spendingbtn"><i class="fa-solid fa-trash-can"></i></button>
+					<button class="spending-x"><i class="fa-solid fa-x"></i></button>
+					</div>`;
 					lastSpendings.append(item);
 					orderOfLastSpending++;
+				});
+
+				spendingBtns = document.querySelectorAll(".spending-dots");
+				spendingBtns.forEach((btn) => {
+					btn.addEventListener("click", spendingOptions);
+				});
+				spendingXBtns = document.querySelectorAll(".spending-x");
+				spendingXBtns.forEach((btn) => {
+					btn.addEventListener("click", spendingOptions);
+				});
+				spendingDeleteBtns = document.querySelectorAll(".last__spendingbtn");
+				spendingDeleteBtns.forEach((btn) => {
+					btn.addEventListener("click", deleteSpending);
 				});
 			} else {
 				console.log("Snapshot for creating last spendings don't exist");
@@ -1363,6 +1315,229 @@ const setCurrency = () => {
 	});
 };
 
+const changeLimit = () => {
+	auth.onAuthStateChanged((user) => {
+		const userRef = ref(db, `users/${user.uid}`);
+
+		update(userRef, {
+			limit: parseInt(profileLimitInput.value),
+		});
+	});
+};
+
+const changeCurrency = () => {
+	auth.onAuthStateChanged((user) => {
+		const userRef = ref(db, `users/${user.uid}`);
+
+		update(userRef, {
+			currency: currencySelect.value,
+		});
+	});
+};
+
+const setEverything = async () => {
+	loginBox.classList.add("hidden");
+	loadingBox.style.display = "flex";
+
+	await Promise.all([
+		checkIfSubsGotPayed(),
+		checkIfUserNeedNewDateInDataBase(),
+		setItemsToSubBox(),
+		setCurrentIncomeAndExpense(),
+		setTotalBalance(),
+		setBudgetSpentBox(),
+		setExpenseSplit(),
+		createRevenueFlow(),
+		createLastSpendings(),
+		setProfileInfo(),
+		setCurrency(),
+	]);
+
+	appLoaded();
+};
+
+const toggleChangeSubPopup = (element) => {
+	resetAllPopups();
+	subChangePopup.classList.toggle("hidden");
+	popupsBg.classList.toggle("hidden")
+
+	auth.onAuthStateChanged((user) => {
+		const subsRef = ref(
+			db,
+			`users/${user.uid}/subs/${element.parentElement.parentElement.parentElement.id}`
+		);
+
+		get(subsRef).then((snapshot) => {
+			const subData = snapshot.val();
+			subChangeNameInput.value = subData.name;
+			subChangePriceInput.value = subData.price;
+		});
+		currentChangeSubId = element.parentElement.parentElement.parentElement.id;
+	});
+};
+
+const formatNumber = (number) => {
+	// Zamień liczbę na string z dwiema miejscami po przecinku
+	let formattedNumber = number.toFixed(2);
+
+	// Dodaj przecinki co trzy cyfry przed częścią dziesiętną
+	formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+	// Usuń ".00" jeśli liczba kończy się na ".00"
+	if (formattedNumber.endsWith(".00")) {
+		formattedNumber = formattedNumber.slice(0, -3);
+	}
+
+	return formattedNumber;
+};
+
+const resetAllPopups = () => {
+	popupsBg.classList.add("hidden");
+	addExpensePopup.classList.add("hidden");
+	addIncomePopup.classList.add("hidden");
+	addSubPopup.classList.add("hidden");
+	subChangePopup.classList.add("hidden");
+};
+
+function subOptions() {
+	const itemBox = this.parentElement.parentElement;
+
+	itemBox.firstElementChild.classList.toggle("sub-active");
+}
+
+function spendingOptions() {
+	const itemOptions = this.parentElement.parentElement.lastElementChild;
+	itemOptions.classList.toggle("spending-active");
+}
+
+function deleteSpending() {
+	const spendingID = this.parentElement.parentElement.id;
+
+	auth.onAuthStateChanged((user) => {
+		const spendingRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/spendings/${spendingID}`
+		);
+		const expenseRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/expense`
+		);
+		const monthRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}`
+		);
+		const typesRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/types`
+		);
+		let type;
+		let price;
+		let typeAmount;
+		let expenseAmount;
+
+		get(spendingRef)
+			.then((snapshot) => {
+				if (snapshot.exists()) {
+					const data = snapshot.val();
+
+					type = data.type;
+					price = data.price;
+				}
+			})
+			.then(() => {
+				get(expenseRef)
+					.then((snapshot) => {
+						expenseAmount = snapshot.val();
+					})
+					.then(() => {
+						const typeRef = ref(
+							db,
+							`users/${user.uid}/money/year${year}/month${month}/types/${type}`
+						);
+
+						get(typeRef)
+							.then((snapshot) => {
+								typeAmount = snapshot.val();
+							})
+							.then(() => {
+								update(typesRef, {
+									[type]: parseFloat(typeAmount - price),
+								});
+
+								update(monthRef, {
+									expense: parseFloat(expenseAmount - price),
+								});
+							})
+							.then(() => {
+								remove(spendingRef);
+							});
+					});
+			});
+	});
+}
+
+function subType() {
+	auth.onAuthStateChanged((user) => {
+		const subsRef = ref(
+			db,
+			`users/${user.uid}/subs/${this.parentElement.parentElement.parentElement.id}`
+		);
+		const expenseRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/expense`
+		);
+		const typesRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/types`
+		);
+		const miscRef = ref(
+			db,
+			`users/${user.uid}/money/year${year}/month${month}/types/miscellaneous`
+		);
+
+		switch (this.textContent) {
+			case "Delete":
+				get(subsRef).then((snapshot) => {
+					if (snapshot.exists()) {
+						const subData = snapshot.val();
+
+						get(expenseRef).then((snapshotExpense) => {
+							if (snapshotExpense.exists()) {
+								const currentExpense = snapshotExpense.val();
+
+								update(
+									ref(db, `users/${user.uid}/money/year${year}/month${month}`),
+									{
+										expense:
+											parseFloat(currentExpense) - parseFloat(subData.price),
+									}
+								);
+							}
+						});
+
+						get(miscRef).then((snapshotTypes) => {
+							if (snapshotTypes.exists()) {
+								update(typesRef, {
+									miscellaneous:
+										parseFloat(snapshotTypes.val()) - parseFloat(subData.price),
+								});
+							}
+						});
+
+						remove(subsRef);
+					}
+				});
+				break;
+			case "Edit":
+				toggleChangeSubPopup(this);
+				break;
+		}
+
+		const itemBox = this.parentElement.parentElement.parentElement;
+		itemBox.firstElementChild.classList.toggle("sub-active");
+	});
+}
+
 function setInputType() {
 	inputType = this.id;
 
@@ -1386,29 +1561,23 @@ function changeSite() {
 	}
 }
 
-const changeLimit = () => {
-	auth.onAuthStateChanged((user) => {
-		const userRef = ref(db, `users/${user.uid}`);
-
-		update(userRef, {
-			limit: parseInt(profileLimitInput.value),
-		});
-	});
+const appLoaded = () => {
+	loadingBox.style.display = "none";
+	document.body.classList.remove("scroll-hidden");
 };
 
-const changeCurrency = () => {
-	auth.onAuthStateChanged((user) => {
-		const userRef = ref(db, `users/${user.uid}`);
-
-		update(userRef, {
-			currency: currencySelect.value,
-		});
-	});
+window.onload = () => {
+	checkUserAuth();
+	revenueBoxScroll.scrollLeft = revenueBoxScroll.scrollWidth;
 };
 
 const setEventListeners = () => {
 	loginTopBtn.forEach((btn) => {
 		btn.addEventListener("click", setInputType);
+	});
+
+	resetPopupsBtns.forEach((btn) => {
+		btn.addEventListener("click", resetAllPopups);
 	});
 
 	loginBtn.addEventListener("click", checkWhatTypeOfAction);
@@ -1428,34 +1597,3 @@ const setEventListeners = () => {
 };
 
 setEventListeners();
-
-const setEverything = async () => {
-	loginBox.classList.add("hidden");
-	loadingBox.style.display = "flex";
-
-	await Promise.all([
-		checkIfSubsGotPayed(),
-		checkIfUserNeedNewDateInDataBase(),
-		setItemsToSubBox(),
-		setCurrentIncomeAndExpense(),
-		setTotalBalance(),
-		setBudgetSpentBox(),
-		setExpenseSplit(),
-		createRevenueFlow(),
-		createLastSpendings(),
-		setProfileInfo(),
-		setCurrency(),
-	]);
-
-	appLoaded();
-};
-
-const appLoaded = () => {
-	loadingBox.style.display = "none";
-	document.body.classList.remove("scroll-hidden");
-};
-
-window.onload = () => {
-	checkUserAuth();
-	revenueBoxScroll.scrollLeft = revenueBoxScroll.scrollWidth;
-};

@@ -41,6 +41,11 @@
 		font-weight: bold;
 		letter-spacing: 0.7px;
 		cursor: pointer;
+		transition: color 0.5s;
+
+		&:hover {
+			color: $text-second-color;
+		}
 
 		&-container {
 			margin-top: 2.5em;

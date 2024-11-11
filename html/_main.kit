@@ -1,6 +1,6 @@
 <main class="main">
     <div class="wrapper">
-        <div class="main__box">
+        <div class="main__box hidden">
             <div class="main__top">
                 <div class="main__container main__container--400 main__container--total">
                     <h2 class="main__title">Total balance</h2>
@@ -127,16 +127,16 @@
                     <p class="main__text main__text--scale main__text--36 main__text--bold main__text--p40">
                         <span id="amountSpent"></span><sup
                             class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>/<span
-                            id="amountToSpent">3,000,00</span><sup
+                            id="amountToSpent"></span><sup
                             class="main__text sup__higher main__text--bold main__text--16 currency">$</sup>
                     </p>
-                    <p class="main__text main__text--14 main__text--80alpha">You got $<span
-                            id="amountLeft">1,575,77</span> left this month</p>
+                    <p class="main__text main__text--14 main__text--80alpha">You got <span id="amountLeft"></span><span
+                            class="currency"></span> left this month</p>
                 </div>
                 <div class="main__container main__container--last main__container--740">
                     <div class="main__container-top-last display-flex justify-between">
                         <h2 class="main__title main__title--last">Last spendings</h2>
-                        <p class="main__text main__text--80alpha main__text--18 main__text--hover">See all ></p>
+                        <!-- <p class="main__text main__text--80alpha main__text--18 main__text--hover">See all ></p> -->
                     </div>
                     <ul class="main__last-list">
                     </ul>
@@ -219,23 +219,27 @@
                 </div>
             </div>
         </div>
-        <div class="main__profile hidden">
+        <div class="main__profile ">
             <div class="main__container main__profile">
-                <p class="main__text main__text--24">Your email: <span id="profile__email"></span></p>
-                <div class="profile__inputbox">
-                    <p class="main__text main__text--18">Your limit:</p>
-                    <input class="profile__input" type="number" placeholder="Spending limit">
+                <div class="profile__top">
+                    <p class="main__text main__text--20">Your email: <span id="profile__email"></span></p>
+                    <button class="profile__button" id="signout">Sign out</button>
                 </div>
-                <div class="profile__inputbox">
-                    <p class="main__text main__text--18">Your currency:</p>
-                    <select class="profile__select" name="" id="currencySelect">
-                        <option class="profile__option" value="$">usd($)</option>
-                        <option class="profile__option" value="€">eur(€)</option>
-                        <option class="profile__option" value="£">gbp(£)</option>
-                        <option class="profile__option" value="zł">pln(zł)</option>
-                    </select>
+                <div>
+                    <div class="profile__inputbox">
+                        <p class="main__text main__text--18">Your limit:</p>
+                        <input class="profile__input" type="number" placeholder="Spending limit">
+                    </div>
+                    <div class="profile__inputbox">
+                        <p class="main__text main__text--18">Your currency:</p>
+                        <select class="profile__select" name="" id="currencySelect">
+                            <option class="profile__option" value="$">usd($)</option>
+                            <option class="profile__option" value="€">eur(€)</option>
+                            <option class="profile__option" value="£">gbp(£)</option>
+                            <option class="profile__option" value="zł">pln(zł)</option>
+                        </select>
+                    </div>
                 </div>
-                <button class="profile__button" id="signout">Sign out</button>
             </div>
         </div>
     </div>
@@ -244,10 +248,21 @@
     <div class="loader hidden"></div>
 </div>
 <div class="add__popup hidden">
-    <input type="number" id="addIncomeInput">
-    <button id="addIncome">Add</button>
+    <div class="popup__top">
+        <p class="main__text main__text--18">Add income:</p>
+        <i class="fa-solid fa-x reset-popups main__text--80alpha main__text--hover"></i>
+    </div>
+    <div class="popup__bottom">
+        <input type="number" id="addIncomeInput" placeholder="Amount">
+        <button id="addIncome">Add</button>
+    </div>
 </div>
 <div class="expense__popup hidden">
+    <div class="popup__top">
+        <p class="main__text main__text--18">Add income:</p>
+        <i class="fa-solid fa-x reset-popups main__text--80alpha main__text--hover"></i>
+    </div>
+    <p class="main__text main__text--18">Type:</p>
     <select name="" id="expenseType">
         <option value="food">Food</option>
         <option value="health">Health</option>
@@ -256,17 +271,32 @@
         <option value="transportation">Transportation</option>
         <option value="miscellaneous">Miscellaneous</option>
     </select>
-    <input type="number" id="addExpenseInput">
-    <button id="addExpense">Add</button>
+    <div class="popup__bottom">
+        <input type="number" id="addExpenseInput" placeholder="Amount">
+        <button id="addExpense">Add</button>
+    </div>
 </div>
 <div class="sub__popup hidden">
-    <input type="text" id="addSubName" placeholder="Name">
-    <input type="number" id="addSubAmount" placeholder="Price">
-    <input type="number" id="addPaymentInterval" placeholder="Payment Interval">
-    <button id="addSub">Add</button>
+    <div class="popup__top">
+        <p class="main__text main__text--18">Add sub:</p>
+        <i class="fa-solid fa-x reset-popups main__text--80alpha main__text--hover"></i>
+    </div>
+    <div class="popup__bottom">
+        <input type="text" id="addSubName" placeholder="Name">
+        <input type="number" id="addSubAmount" placeholder="Price">
+        <input type="number" id="addPaymentInterval" placeholder="Payment Interval">
+        <button id="addSub">Add</button>
+    </div>
 </div>
 <div class="subchange__popup hidden">
-    <input type="text" id="changeSubName" placeholder="Name">
-    <input type="number" id="changeSubAmount" placeholder="Price">
-    <button id="changeSub">Save</button>
+    <div class="popup__top">
+        <p class="main__text main__text--18">Edit sub:</p>
+        <i class="fa-solid fa-x reset-popups main__text--80alpha main__text--hover"></i>
+    </div>
+    <div class="popup__bottom">
+        <input type="text" id="changeSubName" placeholder="Name">
+        <input type="number" id="changeSubAmount" placeholder="Price">
+        <button id="changeSub">Save</button>
+    </div>
 </div>
+<div class="popupsbg hidden"></div>

@@ -75,14 +75,66 @@
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	background-color: black;
+	border-radius: 15px;
+	box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.25);
+	background: $container-bg;
 	z-index: 100;
 
 	button,
+	input,
+	select {
+		font-size: 1.8rem;
+		color: $text-main-color;
+	}
+
 	input {
-		font-size: 2rem;
+		padding: 0.5em;
+		margin: 0.5em 0;
+		border: 1px solid $text-main-color;
+		border-radius: 5px;
+		background: none;
+		color: $text-main-color;
+
+		&:focus {
+			background: rgba(255, 255, 255, 0.05);
+		}
+	}
+
+	select {
+		margin-top: 0.5em;
+		padding: 0.5em;
+		width: 100%;
+		border: 1px solid $text-main-color;
+		border-radius: 5px;
+		background: none;
+		color: $text-main-color;
+	}
+
+	option {
 		color: black;
 	}
+
+	button {
+		padding: 0.4em 0.8em;
+		font-weight: bold;
+		border-radius: 10px;
+		border: none;
+		background: rgba(255, 255, 255, 0.1);
+		cursor: pointer;
+		transition: background 0.5s;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.2);
+		}
+	}
+}
+
+.popupsbg {
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.6);
+	z-index: 99;
 }
 
 .sub-active {
@@ -107,6 +159,63 @@
 	width: 120px;
 	height: 120px;
 	animation: spin 2s linear infinite;
+}
+
+.last__spendingbg {
+	position: absolute;
+	top: 0;
+	right: -400px;
+	width: 100px;
+	height: 100%;
+	display: flex;
+	justify-content: flex-end;
+	align-items: center;
+	border-radius: 5px;
+	background-color: $container-bg;
+	transition: right 0.5s ease-in-out;
+	z-index: 3;
+
+	button {
+		border: none;
+		background: none;
+		color: black;
+	}
+}
+
+.spending-x {
+	margin: 0 1em 0 2em;
+}
+
+.spending-active {
+	right: 0;
+}
+
+.fa-x,
+.fa-trash-can {
+	transition: color 0.5s;
+
+	&:hover {
+		color: $text-main-color;
+	}
+}
+
+.popup {
+	&__top {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 1em;
+
+		i {
+			padding: 0.2em;
+			font-size: 1.8rem;
+		}
+	}
+
+	&__bottom {
+		display: flex;
+		flex-direction: column;
+	}
 }
 
 @keyframes spin {
