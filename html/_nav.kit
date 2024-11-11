@@ -16,8 +16,14 @@
             <button class="login__topbtn" id="signup">Sign up</button>
         </div>
         <div class="login__bottom">
-            <input type="text" id="email" class="login__input" placeholder="E-mail">
-            <input type="password" id="password" class="login__input" placeholder="Password">
+            <div class="login__inputbox">
+                <p class="login__error" id="emailError"></p>
+                <input type="text" id="email" class="login__input" placeholder="E-mail">
+            </div>
+            <div class="login__inputbox">
+                <p class="login__error" id="passwordError"></p>
+                <input type="password" id="password" class="login__input" placeholder="Password">
+            </div>
             <button class="login__mainbtn">Sign in</button>
         </div>
     </div>

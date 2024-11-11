@@ -110,7 +110,7 @@
 	}
 
 	&__topbtn {
-		font-size: 1.6rem;
+		font-size: 1.8rem;
 		border: none;
 		background: none;
 		color: $text-second-color;
@@ -127,30 +127,46 @@
 		width: 100%;
 	}
 
+	&__error {
+		min-height: 17px;
+		font-size: 1.4rem;
+		color: #ff7676;
+		background: $body-color;
+		z-index: 100;
+	}
+
 	&__input {
-		margin: 0.25em 0;
-		padding: 0.25em;
+		padding: 0.5em;
+		margin: 0.5em 0;
 		width: 100%;
 		font-size: 1.6rem;
+		border: 1px solid $text-main-color;
 		border-radius: 5px;
-		color: $text-black-color;
+		background: black;
+		color: $text-main-color;
+
+		&:focus {
+			background: rgba(255, 255, 255, 0.05);
+		}
 	}
 
 	&__mainbtn {
-		padding: 0.25em 0;
 		margin-top: 0.5em;
+		padding: 0.4em 0.8em;
 		font-size: 1.8rem;
-		border: none;
-		border-radius: 5px;
-		background: rgb(216, 185, 255);
-		box-shadow: 0px 4px 4px black;
-		color: $text-black-color;
 		font-weight: bold;
+		border-radius: 10px;
+		border: none;
+		background: rgba(255, 255, 255, 0.1);
 		cursor: pointer;
+		transition: background 0.5s;
+
+		&:hover {
+			background: rgba(255, 255, 255, 0.2);
+		}
 	}
 
 	&-btn-active {
 		color: rgb(255, 255, 255);
 	}
 }
-

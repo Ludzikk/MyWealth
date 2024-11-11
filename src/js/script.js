@@ -42,6 +42,7 @@ const expenseSplitCircle = document.querySelector(".main__circle");
 const revenueList = document.querySelector(".main__revenue-list");
 const lastSpendings = document.querySelector(".main__last-list");
 const loginTopBtn = document.querySelectorAll(".login__topbtn");
+const loginInput = document.querySelectorAll(".login__input");
 const emailInput = document.querySelector("#email");
 const passwordInput = document.querySelector("#password");
 const loginBtn = document.querySelector(".login__mainbtn");
@@ -78,6 +79,8 @@ const loadingBox = document.querySelector(".loading");
 const loader = document.querySelector(".loader");
 const resetPopupsBtns = document.querySelectorAll(".reset-popups");
 const popupsBg = document.querySelector(".popupsbg");
+const passwordError = document.querySelector("#passwordError");
+const emailError = document.querySelector("#emailError");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
@@ -161,17 +164,16 @@ const checkWhatTypeOfAction = () => {
 	}
 };
 
+// this function check if user is loged in 
 const checkUserAuth = () => {
 	onAuthStateChanged(auth, (user) => {
+		// if user ever logged in it will automatically login him
 		if (user) {
-			// Jeśli użytkownik jest zalogowany, ustaw wszystko
 			loginBox.classList.add("hidden");
 			loader.classList.remove("hidden");
 			setEverything();
-			console.log("User is already logged in:", user.email);
 		} else {
 			loginBox.classList.remove("hidden");
-			console.log("No user is logged in");
 		}
 	});
 };
@@ -193,7 +195,7 @@ const createUser = () => {
 					currency: "$",
 					limit: 3000,
 				}).catch((error) => {
-					console.error("Error adding user:", error);
+					console.error("Error while adding user to database: ", error);
 				});
 
 				// we set user database structure
@@ -209,17 +211,41 @@ const createUser = () => {
 						miscellaneous: 0,
 					},
 				}).catch((error) => {
-					console.error("Error adding user:", error);
+					console.error("Error while adding user to database: ", error);
 				});
+
+				// when user get created show and count every data
+				setEverything();
 			})
 			.catch((error) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				console.error("Error creating user:", errorCode, errorMessage);
-			});
+				let displayMessage;
 
-		// when user get created show and count every data
-		setEverything();
+				switch (errorCode) {
+					case "auth/email-already-in-use":
+						displayMessage =
+							"This e-mail is in use by other account.";
+						emailError.textContent = displayMessage;
+						break;
+					case "auth/invalid-email":
+						displayMessage = "Wrong format of e-mail.";
+						emailError.textContent = displayMessage;
+						break;
+					case "auth/password-does-not-meet-requirements":
+						displayMessage =
+							"Password is too weak. It need to contain:\n" +
+							"- min length of 6\n" +
+							"- uppercase character\n" +
+							"- lowercase character\n" +
+							"- numeric character";
+						passwordError.textContent = displayMessage;
+						break;
+					default:
+						displayMessage = "Error: " + errorMessage;
+						console.log(displayMessage);
+				}
+			});
 	}
 };
 
@@ -237,29 +263,43 @@ const loginUser = () => {
 			.catch((error) => {
 				const errorCode = error.code;
 				const errorMessage = error.message;
-				console.error("Error signing in:", errorCode, errorMessage);
+				let displayMessage;
+
+				switch (errorCode) {
+					case "auth/invalid-credential":
+						displayMessage =
+							"Wrong login info.";
+						emailError.textContent = displayMessage;
+						break;
+					default:
+						displayMessage = "Error: " + errorMessage;
+						console.log(displayMessage);
+				}
 			});
 	}
 };
 
+// we allow user to signout 
 const signoutUser = () => {
 	signOut(auth)
 		.then(() => {
-			console.log("User signed out successfully");
-			// Opcjonalnie: przekieruj użytkownika na stronę logowania lub odśwież stronę
-			window.location.reload(); // lub window.location.href = '/login.html';
+			window.location.reload();
 		})
 		.catch((error) => {
 			console.error("Error signing out:", error);
 		});
 };
 
+// create items to subbox 
 const setItemsToSubBox = () => {
 	auth.onAuthStateChanged((user) => {
 		const subsRef = ref(db, `users/${user.uid}/subs`);
 
 		onValue(subsRef, (snapshot) => {
+			// reset subBox so we do not duplicate items
 			subsriptionBox.innerHTML = "";
+
+			// if user have any subs in database create them
 			if (snapshot.exists()) {
 				snapshot.forEach((childSnapshot) => {
 					const childData = childSnapshot.val();
@@ -306,7 +346,7 @@ const setItemsToSubBox = () => {
 					subItemPrice.innerHTML = `${childData.price}<span class="currency"></span>`;
 
 					const [year, month, day] = childData.dateOfPay.split(",").map(Number);
-					const paymentDate = new Date(year, month - 1, day); // Miesiące są indeksowane od 0 (styczeń to 0)
+					const paymentDate = new Date(year, month - 1, day); // -1 becouse months in js start from index 0 
 
 					subItemNextPayment.textContent = `Next ${paymentDate.getDate()} ${
 						monthNames[paymentDate.getMonth()]
@@ -322,6 +362,7 @@ const setItemsToSubBox = () => {
 					subItem.append(subBg, subItemLeft, subItemRight);
 					subsriptionBox.append(subItem);
 
+					// add listeners to newly created buttons
 					subDotsBtn = document.querySelectorAll(".sub-dots");
 					subDotsBtn.forEach((btn) => {
 						btn.addEventListener("click", subOptions);
@@ -342,6 +383,7 @@ const setItemsToSubBox = () => {
 	});
 };
 
+// this function change date of sub in database
 const checkIfSubsGotPayed = () => {
 	auth.onAuthStateChanged((user) => {
 		const subRef = ref(db, `users/${user.uid}/subs`);
@@ -364,6 +406,7 @@ const checkIfSubsGotPayed = () => {
 					nextPayDate = `${dateOfNextPay.getFullYear()}, ${dateOfNextPay.getMonth()}, ${dateOfNextPay.getDate()}`;
 				}
 
+				// if user payed for sub, then set date + interval of payment in months
 				if (currentDate >= new Date(dateOfPay)) {
 					update(ref(db, `users/${user.uid}/subs/${snapshotChild.key}`), {
 						dateOfBuy: dateOfPay,
@@ -375,6 +418,7 @@ const checkIfSubsGotPayed = () => {
 	});
 };
 
+// this function sets income and expense boxes
 const setCurrentIncomeAndExpense = () => {
 	auth.onAuthStateChanged((user) => {
 		const incomePath = `users/${user.uid}/money/year${year}/month${month}/income`;
@@ -384,7 +428,7 @@ const setCurrentIncomeAndExpense = () => {
 			if (snapshot.exists()) {
 				incomeTotal.textContent = formatNumber(snapshot.val());
 			} else {
-				console.log("No data available for this path.");
+				console.log("No data available for income");
 			}
 		});
 
@@ -395,7 +439,7 @@ const setCurrentIncomeAndExpense = () => {
 			if (snapshot.exists()) {
 				expenseTotal.textContent = formatNumber(snapshot.val());
 			} else {
-				console.log("No data available for this path.");
+				console.log("No data available for expense");
 			}
 		});
 
@@ -496,14 +540,15 @@ const setCurrentIncomeAndExpense = () => {
 	});
 };
 
+// this function sets total balance
 const setTotalBalance = () => {
 	return new Promise((resolve, reject) => {
 		auth.onAuthStateChanged((user) => {
 			if (user) {
 				const userId = user.uid;
-				let totalUserBalance = 0; // Reset total balance for this calculation
+				let totalUserBalance = 0; // reset total balance for this calculation
 
-				// Pobierz wszystkie lata
+				// get all years
 				get(ref(db, `users/${userId}/money`))
 					.then((snapshot) => {
 						if (snapshot.exists()) {
@@ -555,9 +600,9 @@ const setTotalBalance = () => {
 						reject(error);
 					});
 
-				// Pobierz bilans netto za poprzedni miesiąc jako osobne zadanie
+				
 				const currentYear = new Date().getFullYear();
-				const previousMonth = new Date().getMonth(); // Poprzedni miesiąc (indeksowany od 0)
+				const previousMonth = new Date().getMonth(); 
 
 				get(
 					ref(
@@ -591,12 +636,12 @@ const setTotalBalance = () => {
 	});
 };
 
+// we create new data in database when user login (if user dont have data for this year and month)
 const checkIfUserNeedNewDateInDataBase = () => {
 	let subsValue = 0;
 	auth.onAuthStateChanged((user) => {
 		get(ref(db, `users/${user.uid}/money/year${year}`)).then((snapshot) => {
 			if (snapshot.exists()) {
-				// console.log("User have " + year + " year");
 				get(ref(db, `users/${user.uid}/money/year${year}/month${month}`)).then(
 					(snapshot) => {
 						if (!snapshot.exists()) {
@@ -630,7 +675,6 @@ const checkIfUserNeedNewDateInDataBase = () => {
 					}
 				);
 			} else {
-				// console.log("Need to create" + year + " year");
 				get(ref(db, `users/${user.uid}/subs`))
 					.then((snapshot) => {
 						if (snapshot.exists()) {
@@ -668,7 +712,6 @@ const setBudgetSpentBox = () => {
 		onValue(limitRef, (snapshot) => {
 			const userLimit = snapshot.val();
 
-			// Aktualizacja wyświetlanego limitu
 			budgetLimit.textContent = formatNumber(userLimit);
 
 			onValue(
@@ -679,7 +722,7 @@ const setBudgetSpentBox = () => {
 						budgetSpent.textContent = formatNumber(expense);
 						budgetLeft.textContent = formatNumber(userLimit - expense);
 					} else {
-						// Jeśli nie ma jeszcze wydatków w bazie, ustawiamy 0
+						// if user dont have spending set it to 0
 						budgetSpent.textContent = formatNumber(0);
 						budgetLeft.textContent = formatNumber(userLimit);
 					}
@@ -689,6 +732,7 @@ const setBudgetSpentBox = () => {
 	});
 };
 
+// set expense split
 const setExpenseSplit = () => {
 	auth.onAuthStateChanged((user) => {
 		const expenseRef = ref(
@@ -879,6 +923,7 @@ const setExpenseSplit = () => {
 	expenseSplitMonth.textContent = monthNamesShort[month - 1];
 };
 
+// set colors of circle
 const setCircleBg = (f, h, b, e, t, m) => {
 	expenseSplitCircle.style.background = `conic-gradient(#ffe562 0 ${f}%,#f874a3 0 ${
 		f + h
@@ -887,6 +932,7 @@ const setCircleBg = (f, h, b, e, t, m) => {
 	}%,#ff8e62 0 ${f + h + b + e + t + m}%,rgba(0,0,0,.1) 100% 100%)`;
 };
 
+// set revenue flow
 const createRevenueFlow = () => {
 	auth.onAuthStateChanged((user) => {
 		if (user) {
@@ -960,19 +1006,19 @@ const createRevenueFlow = () => {
 const toggleAddIncomePopup = () => {
 	resetAllPopups();
 	addIncomePopup.classList.toggle("hidden");
-	popupsBg.classList.toggle("hidden")
+	popupsBg.classList.toggle("hidden");
 };
 
 const toggleAddExpensePopup = () => {
 	resetAllPopups();
 	addExpensePopup.classList.toggle("hidden");
-	popupsBg.classList.toggle("hidden")
+	popupsBg.classList.toggle("hidden");
 };
 
 const toggleAddSub = () => {
 	resetAllPopups();
 	addSubPopup.classList.toggle("hidden");
-	popupsBg.classList.toggle("hidden")
+	popupsBg.classList.toggle("hidden");
 };
 
 const addIncome = () => {
@@ -1299,13 +1345,12 @@ const setCurrency = () => {
 			const currencySpan = document.querySelectorAll(".currency");
 			const currencyRef = ref(db, `users/${user.uid}/currency`);
 
-			// Nasłuchiwanie danych przy użyciu `onValue`
 			onValue(currencyRef, (snapshot) => {
 				if (snapshot.exists()) {
 					currencySpan.forEach((item) => {
 						item.textContent = snapshot.val();
 					});
-					// Zakończenie Promise po pierwszym ustawieniu wartości
+					
 					resolve();
 				} else {
 					reject("No currency data found");
@@ -1335,6 +1380,7 @@ const changeCurrency = () => {
 	});
 };
 
+// we set all info after user login
 const setEverything = async () => {
 	loginBox.classList.add("hidden");
 	loadingBox.style.display = "flex";
@@ -1359,7 +1405,7 @@ const setEverything = async () => {
 const toggleChangeSubPopup = (element) => {
 	resetAllPopups();
 	subChangePopup.classList.toggle("hidden");
-	popupsBg.classList.toggle("hidden")
+	popupsBg.classList.toggle("hidden");
 
 	auth.onAuthStateChanged((user) => {
 		const subsRef = ref(
@@ -1377,13 +1423,11 @@ const toggleChangeSubPopup = (element) => {
 };
 
 const formatNumber = (number) => {
-	// Zamień liczbę na string z dwiema miejscami po przecinku
 	let formattedNumber = number.toFixed(2);
 
-	// Dodaj przecinki co trzy cyfry przed częścią dziesiętną
+	// add , every 3 characters
 	formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
-	// Usuń ".00" jeśli liczba kończy się na ".00"
 	if (formattedNumber.endsWith(".00")) {
 		formattedNumber = formattedNumber.slice(0, -3);
 	}
@@ -1397,6 +1441,11 @@ const resetAllPopups = () => {
 	addIncomePopup.classList.add("hidden");
 	addSubPopup.classList.add("hidden");
 	subChangePopup.classList.add("hidden");
+};
+
+const resetLoginErrors = () => {
+	passwordError.textContent = "";
+	emailError.textContent = "";
 };
 
 function subOptions() {
@@ -1578,6 +1627,10 @@ const setEventListeners = () => {
 
 	resetPopupsBtns.forEach((btn) => {
 		btn.addEventListener("click", resetAllPopups);
+	});
+
+	loginInput.forEach((btn) => {
+		btn.addEventListener("click", resetLoginErrors);
 	});
 
 	loginBtn.addEventListener("click", checkWhatTypeOfAction);
