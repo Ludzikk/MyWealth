@@ -7,6 +7,11 @@ It was my second time using firebase. This time it was more complex since 90% of
 
 Link to [website](https://ludzikk.github.io/MyWealth/), it was built using [GitHub Pages](https://pages.github.com/).
 
+**Account for testing**
+
+E-mail: test@gmail.com
+Password: Test123
+
 **What i used in this project:**
 
 1. HTML

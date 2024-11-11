@@ -81,6 +81,7 @@ const resetPopupsBtns = document.querySelectorAll(".reset-popups");
 const popupsBg = document.querySelector(".popupsbg");
 const passwordError = document.querySelector("#passwordError");
 const emailError = document.querySelector("#emailError");
+const expenseSplitOptions = document.querySelectorAll(".expenseSplitOption");
 let subDotsBtn = "";
 let subXBtns = "";
 let subTypesBtn = "";
@@ -98,6 +99,7 @@ let orderOfLastSpending = 0;
 let inputType = "";
 let userLimit = 0;
 let totalUserBalance = 0;
+let currentMonth = month;
 
 const monthNames = [
 	"January",
@@ -734,31 +736,31 @@ const setExpenseSplit = () => {
 	auth.onAuthStateChanged((user) => {
 		const expenseRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/expense`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/expense`
 		);
 		const foodRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/food`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/food`
 		);
 		const healthRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/health`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/health`
 		);
 		const billsRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/bills`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/bills`
 		);
 		const entertainmentRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/entertainment`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/entertainment`
 		);
 		const transportationRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/transportation`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/transportation`
 		);
 		const miscellaneousRef = ref(
 			db,
-			`users/${user.uid}/money/year${year}/month${month}/types/miscellaneous`
+			`users/${user.uid}/money/year${year}/month${currentMonth}/types/miscellaneous`
 		);
 
 		let expenseValue = 0;
@@ -780,6 +782,8 @@ const setExpenseSplit = () => {
 				expenseValue = snapshot.val();
 
 				expenseSplitTotal.textContent = formatNumber(snapshot.val());
+			} else {
+				expenseSplitTotal.textContent = 0;
 			}
 
 			if (snapshot.val() <= 0) {
@@ -916,8 +920,6 @@ const setExpenseSplit = () => {
 			});
 		});
 	});
-
-	expenseSplitMonth.textContent = monthNamesShort[month - 1];
 };
 
 // set colors of circle
@@ -1612,6 +1614,11 @@ function changeSite() {
 	}
 }
 
+function setCurrentMonthForExpenseSplit() {
+	currentMonth = this.value;
+	setExpenseSplit();
+}
+
 const appLoaded = () => {
 	loadingBox.style.display = "none";
 	document.body.classList.remove("scroll-hidden");
@@ -1635,6 +1642,14 @@ const setEventListeners = () => {
 		btn.addEventListener("click", resetLoginErrors);
 	});
 
+	expenseSplitOptions.forEach((option) => {
+		if (option.value == currentMonth) {
+			option.selected = true;
+		} else {
+			option.selected = false;
+		}
+	});
+
 	loginBtn.addEventListener("click", checkWhatTypeOfAction);
 	addBtnTotalBalance.addEventListener("click", toggleAddIncomePopup);
 	incomeBoxBtn.addEventListener("click", toggleAddIncomePopup);
@@ -1649,6 +1664,7 @@ const setEventListeners = () => {
 	signoutBtn.addEventListener("click", signoutUser);
 	profileLimitInput.addEventListener("change", changeLimit);
 	currencySelect.addEventListener("change", changeCurrency);
+	expenseSplitMonth.addEventListener("change", setCurrentMonthForExpenseSplit);
 };
 
 setEventListeners();
